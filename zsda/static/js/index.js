@@ -1,72 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import { Container, Nav, Navbar } from 'react-bootstrap';
 
 function Layout(props) {
     return (
-        <CustomNav/>
-    );
-}
-
-function CustomNav(props) {
-    return (
-        <Navbar bg="primary" classNameName="justify-content-between">
-            <Navbar.Brand>
-                ZSD Analytics
-            </Navbar.Brand>
-            <Nav>
-                <Nav.Link>About</Nav.Link>
-                <Nav.Link>Baseball</Nav.Link>
-            </Nav>
-        </Navbar>
-    );
-}
-
-function BSNav(props) {
-    return (
-        <nav classNameName="navbar navbar-dark bg-primary">
-            <div classNameName="container-fluid">
-                <a classNameName="navbar-brand" href="#">ZSD Analytics</a>
-                <button classNameName="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                    <span classNameName="navbar-toggler-icon"></span>
-                </button>
-                <div classNameName="collapse navbar-collapse" id="navbarToggler">
-                    <ul classNameName="navbar-nav">
-                        <li classNameName="nav-item">
-                            <a classNameName="nav-link active" aria-current="page" href="#">Home</a>
-                        </li>
-                        <li classNameName="nav-item">
-                            <a classNameName="nav-link" href="#">Baseball</a>
-                        </li>
-                    </ul>
-                </div>
+        <div>
+            <MyNav />
+            <div className="container-fluid mt-3">
+                <MyBody />
             </div>
-        </nav>
-    )
+        </div>
+    );
 }
 
-function ExampleNav(props) {
+function MyNav(props) {
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav className="navbar navbar-expand navbar-dark bg-primary">
             <div className="container-fluid">
-                <a className="navbar-brand" href="#">Navbar</a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span className="navbar-toggler-icon"></span>
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
+                <a className="navbar-brand" href="#">ZSD Analytics</a>
+                <div className="collapse navbar-collapse">
                     <ul className="navbar-nav">
                         <li className="nav-item">
                             <a className="nav-link active" aria-current="page" href="#">Home</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="#">Features</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Pricing</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                            <a className="nav-link" href="#">Baseball</a>
                         </li>
                     </ul>
                 </div>
@@ -75,7 +33,44 @@ function ExampleNav(props) {
     )
 }
 
+function MyBody(props) {
+    return (
+        <div className="row row-cols-1 row-cols-md-2 g-3">
+            <div className="col">
+                <div className="card">
+                    <div className="card-body">
+                        <h6 className="card-title text-center">About</h6>
+                        <p className="card-text">
+                            Hello! Welcome to zsdanalytics.com! This site is my personal project for practicing programming.
+                            The site itself is run using a Flask back-end connected to a front-end that utilizes JavaScript React
+                            for the interactive UI and designed using Bootstrap. The baseball portion of the site connects to a MySQL database
+                            that stores all of the relevant data and uses Python code to run the statistics analysis with the help of popular
+                            libraries such as Pandas, NumPy, and more.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div className="col">
+                <div className="card">
+                    <div className="card-body">
+                        <h6 className="card-title text-center">Baseball</h6>
+                        <p className="card-text">
+                            Looking for more in-depth statistics than regular box scores? The baseball section
+                            of this site is aimed at providing pitch-by-pitch analysis of players in a more user-friendly and 
+                            straight forward way than other sites. Compare pitchers and batters, find out what pitch types and locations
+                            are the most deadly, and go pitch by pitch through games with data easily available on every pitch!
+                        </p>
+                        <div className="card-body text-center">
+                            <a href="#" className="card-link btn btn-primary">Check it out!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
 ReactDOM.render(
-    <ExampleNav />,
+    <Layout />,
     document.getElementById('root')
 )
