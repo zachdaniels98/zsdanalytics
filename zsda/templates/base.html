@@ -3,15 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
     <title>{% block title %}{% endblock %}</title>
 
 </head>
 
 <body>
-    <div id="root">
-        {% block content %}{% endblock %}
-    </div>
-    <script src="{{ url_for('static', filename='dist/index.bundle.js') }}"></script>
+    <!-- <nav className="navbar navbar-expand navbar-dark bg-primary">
+        <div className="container-fluid">
+            <a className="navbar-brand" href="{{ url_for('home.index') }}">ZSD Analytics</a>
+            <div className="collapse navbar-collapse">
+                <ul className="navbar-nav">
+                    <li className="nav-item">
+                        <a className="nav-link active" aria-current="page" href="{{ url_for('home.index') }}">Home</a>
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" href="{{ url_for('baseball.home') }}">Baseball</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav> -->
+    <div id="root"></div>
+    {% block content %}{% endblock %}
 </body>
 </html>

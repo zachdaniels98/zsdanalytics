@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
 import 'bootstrap/dist/css/bootstrap.min.css'
-import MyNav from './nav'
 
 function Layout(props) {
     return (
@@ -13,6 +12,28 @@ function Layout(props) {
         </div>
     );
 }
+
+function MyNav(props) {
+    return (
+        <nav className="navbar navbar-expand navbar-dark bg-primary">
+            <div className="container-fluid">
+                <a className="navbar-brand" href="/">ZSD Analytics</a>
+                <div className="collapse navbar-collapse">
+                    <ul className="navbar-nav">
+                        <li className="nav-item">
+                            <a className="nav-link active" aria-current="page" href="/">Home</a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="/baseball">Baseball</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    )
+}
+
+export default MyNav;
 
 function MyBody(props) {
     return (

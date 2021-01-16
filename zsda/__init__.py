@@ -24,4 +24,7 @@ def create_app(test_config=None):
     from . import home
     app.register_blueprint(home.bp)
 
+    from .views import baseball
+    app.register_blueprint(baseball.bp)
+
     return app

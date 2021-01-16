@@ -4,7 +4,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: {
-        index: path.resolve(__dirname, "js/index.js")
+        index: path.resolve(__dirname, "js/index.js"),
+        baseball_home: path.resolve(__dirname, "js/baseball.home.js")
     },
     mode: "development",
     devtool: 'inline-source-map',
