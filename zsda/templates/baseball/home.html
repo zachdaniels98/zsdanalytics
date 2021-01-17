@@ -3,5 +3,31 @@
 {% block title %}Baseball Home{% endblock %}
 
 {% block content %}
+<div class="container-fluid mt-3">
+    <div class="card-group">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Player Search</h4>
+                <form class="row" method="POST">
+                    <div class="col">
+                        <input type="search" class="form-control" id="playerName" placeholder="Enter Player Name">
+                    </div>
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body text-center">
+                <h6 class="card-title">Date Picker</h6>
+                <div id="calendar"></div>
+                <p class="card-text">
+                    Have a specific game in mind? Select a date and then choose a game to go through pitch by pitch.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="{{ url_for('static', filename='dist/baseball_home.bundle.js') }}"></script>
 {% endblock %}

@@ -1,18 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import MyNav from './nav'
-
-function Layout(props) {
-    return (
-        <div>
-            <MyNav />
-            <div className="container-fluid mt-3">
-                <MyBody />
-            </div>
-        </div>
-    );
-}
 
 function MyBody(props) {
     return (
@@ -52,6 +39,8 @@ function MyBody(props) {
 }
 
 ReactDOM.render(
-    <Layout />,
+    <div className="container-fluid mt-3">
+        <MyBody />
+    </div>,
     document.getElementById('root')
 )

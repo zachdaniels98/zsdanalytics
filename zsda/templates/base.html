@@ -3,27 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/bootstrap/dist/css/bootstrap.min.css') }}" type="text/css">
     
     <title>{% block title %}{% endblock %}</title>
 
 </head>
 
 <body>
-    <!-- <nav className="navbar navbar-expand navbar-dark bg-primary">
-        <div className="container-fluid">
-            <a className="navbar-brand" href="{{ url_for('home.index') }}">ZSD Analytics</a>
-            <div className="collapse navbar-collapse">
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <a className="nav-link active" aria-current="page" href="{{ url_for('home.index') }}">Home</a>
-                    </li>
-                    <li className="nav-item">
-                        <a className="nav-link" href="{{ url_for('baseball.home') }}">Baseball</a>
+    <nav class="navbar navbar-expand navbar-dark bg-primary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('home.index') }}">ZSD Analytics</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('baseball.home') }}">Baseball</a>
                     </li>
                 </ul>
             </div>
         </div>
-    </nav> -->
+    </nav>
     <div id="root"></div>
     {% block content %}{% endblock %}
 </body>
