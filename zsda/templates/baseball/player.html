@@ -3,4 +3,11 @@
 {% block title %}Player Overview{% endblock %}
 
 {% block content %}
+<div class="container-fluid mt-2">
+    <div class="row align-items-center">
+        <div class="col" id="playerInfo"></div>
+        <div class="col" id="strikezone"></div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='dist/baseball_player.bundle.js') }}"></script>
 {% endblock %}

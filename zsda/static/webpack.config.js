@@ -5,7 +5,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 module.exports = {
     entry: {
         index: path.resolve(__dirname, "js/index.js"),
-        baseball_home: path.resolve(__dirname, "js/baseball.home.js")
+        baseball_home: path.resolve(__dirname, "js/baseball.home.js"),
+        baseball_player: path.resolve(__dirname, "js/baseball.player.js")
     },
     mode: "development",
     devtool: 'inline-source-map',
@@ -23,8 +24,8 @@ module.exports = {
                 }
             },
             {
-                test: /\.css$/,
-                use: ["style-loader", "css-loader"]
+                test: /\.(sa|sc|c)ss$/,
+                use: ["style-loader", "css-loader", "sass-loader"]
             }
         ]
     },

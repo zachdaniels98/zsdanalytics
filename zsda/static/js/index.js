@@ -43,4 +43,4 @@ ReactDOM.render(
         <MyBody />
     </div>,
     document.getElementById('root')
-)
+);
