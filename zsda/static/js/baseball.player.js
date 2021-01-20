@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import '../css/custom.css';
+import '../scss/custom.scss';
 
 class ZoneSquare extends React.Component {
     render() {
@@ -13,29 +13,13 @@ class ZoneSquare extends React.Component {
 class ZoneEdge extends React.Component {
     render() {
         return (
-            <button className="zone-edge"></button>
+            <button className={this.props.zoneNumber}></button>
         )
     }
 }
 
 class Zone extends React.Component {
-    renderZoneRow() {
-        zones = Array(3).fill(null);
-        row = zones.map((zone) => <ZoneSquare />);
-        return row;
-    }
-
-    renderInnerZone() {
-        rows = Array(3).fill(null);
-        zone = rows.map((row) => 
-            <div className="zone-row">
-                {this.renderZoneRow()}
-            </div>
-        );
-        return zone;
-    }
-
-    renderSomething() {
+    renderZone() {
         let zone = [];
         for (let i = 0; i < 3; i++) {
             let row = []
@@ -50,14 +34,20 @@ class Zone extends React.Component {
 
     render() {
         return (
-            <div>
-                {this.renderSomething()}
+            <div className="inner-zone">
+                {this.renderZone()}
             </div>
         )
     }
 }
 
 ReactDOM.render(
-    <Zone />,
+    <div className="full-zone">
+        <ZoneEdge zoneNumber="zone-eleven"/>
+        <ZoneEdge zoneNumber="zone-twelve"/>
+        <ZoneEdge zoneNumber="zone-thirteen"/>
+        <ZoneEdge zoneNumber="zone-fourteen"/>
+        <Zone />
+    </div>,
     document.getElementById('strikezone')
 );

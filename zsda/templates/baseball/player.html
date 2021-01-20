@@ -4,9 +4,9 @@
 
 {% block content %}
 <div class="container-fluid mt-2">
-    <div class="row align-items-center">
-        <div class="col" id="playerInfo"></div>
-        <div class="col" id="strikezone"></div>
+    <div class="row">
+        <div class="col border align-items-center text-center" id="playerInfo"></div>
+        <div class="col d-flex justify-content-center border" id="strikezone"></div>
     </div>
 </div>
 <script src="{{ url_for('static', filename='dist/baseball_player.bundle.js') }}"></script>
