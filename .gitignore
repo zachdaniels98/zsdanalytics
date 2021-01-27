@@ -7,3 +7,4 @@ venv/
 zsda/__pycache__/
 zsda/static/node_modules/
 zsda/static/dist/
+zsda/db.py

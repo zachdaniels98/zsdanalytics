@@ -3,7 +3,7 @@ import os
 from flask import Flask
 
 def create_app(test_config=None):
-    template_dir = 'static/dist/'
+    # template_dir = 'static/dist/'
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -26,5 +26,10 @@ def create_app(test_config=None):
 
     from .views import baseball
     app.register_blueprint(baseball.bp)
+
+    from .views import api
+    app.register_blueprint(api.bp)
+
+    from . import db
 
     return app
