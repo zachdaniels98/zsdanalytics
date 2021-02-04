@@ -3,11 +3,28 @@ import ReactDOM from 'react-dom';
 import '../scss/custom.scss';
 
 class PlayerInfo extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: []
+        };
+    }
+
+    getAPI() {
+        const api_url = 'http://127.0.0.1:5000/baseball/api/player/477132';
+        var num = 0;
+        var kershaw;
+        fetch(api_url)
+            .then(response => response.json())
+            .then(data => this.setState({data: data}));
+    }
+
     render() {
+        this.getAPI()
         return (
             <div className="card text-center">
                 <div className="card-body">
-                    <h4 className="card-title">Player Name</h4>
+                    <h4 className="card-title">{this.state.data.first_name + " " + this.state.data.last_name}</h4>
                     <div className="btn-group" role="group" aria-label="pitch type checkbox toggle button group">
                         <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off"></input>
                         <label className="btn btn-outline-primary" htmlFor="btncheck1">4-Seam Fastball</label>
