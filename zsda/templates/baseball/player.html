@@ -5,9 +5,59 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col border d-flex align-items-center justify-content-center" id="player-info"></div>
+        <div class="col border d-flex justify-content-center" id="player-info">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h4 class="card-title">{{ info.first_name + " " + info.last_name }}</h4>
+                    <h6 class="card-subtitle mb-2">Team: {{ info.team_id }} Position: {{ info.position }}</h6>
+                    <div class="table-responsive">
+                        <table class="table-bordered">
+                            <thead>
+                                <tr>
+                                    {% for statkey in stats.keys() %}
+                                        <th scope="col" data-bs-toggle="tooltip" title="{{ fields[statkey].tooltip }}">{{ fields[statkey].abbr }}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {% for statkey in stats.keys() %}
+                                        <td>{{ stats[statkey] }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- {% for statkey in stats.keys() %}
+                            {% if (loop.index - 1) % 10 == 0 %}
+                                <div class="col">
+                                    <table class="table">
+                                        <tbody>
+                            {% endif %}
+                                            <tr>
+                                                <th scope="row">{{ fields[statkey].abbr }}</th>
+                                                <td>{{ stats[statkey] }}</td>
+                                            </tr>
+                            {% if (loop.index - 1) % 10 == 9 or loop.last %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                        {% endfor %} -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col border d-flex justify-content-center" id="strikezone"></div>
     </div>
 </div>
 <script src="{{ url_for('static', filename='dist/baseball_player.bundle.js') }}"></script>
+<script src="{{ url_for('static', filename='node_modules/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+</script>
 {% endblock %}

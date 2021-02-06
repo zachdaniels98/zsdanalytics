@@ -10,17 +10,23 @@ class PlayerInfo extends React.Component {
         };
     }
 
-    getAPI() {
+    // getAPI() {
+    //     const api_url = 'http://127.0.0.1:5000/baseball/api/player/477132';
+    //     var num = 0;
+    //     var kershaw;
+    //     fetch(api_url)
+    //         .then(response => response.json())
+    //         .then(data => this.setState({data: data}));
+    // }
+
+    componentDidMount() {
         const api_url = 'http://127.0.0.1:5000/baseball/api/player/477132';
-        var num = 0;
-        var kershaw;
         fetch(api_url)
             .then(response => response.json())
             .then(data => this.setState({data: data}));
     }
 
     render() {
-        this.getAPI()
         return (
             <div className="card text-center">
                 <div className="card-body">
@@ -136,7 +142,7 @@ ReactDOM.render(
     document.getElementById('strikezone')
 );
 
-ReactDOM.render(
-    <PlayerInfo />,
-    document.getElementById('player-info')
-)
+// ReactDOM.render(
+//     <PlayerInfo />,
+//     document.getElementById('player-info')
+// )

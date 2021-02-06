@@ -24,7 +24,7 @@ def create_app(test_config=None):
     from . import home
     app.register_blueprint(home.bp)
 
-    from .views import baseball, api, analysis
+    from .views import baseball, api, analysis, shared
     app.register_blueprint(baseball.bp)
     app.register_blueprint(api.bp)
 
