@@ -8,7 +8,7 @@
     background: #fff;
     border: 1px solid #999;
     float: left;
-    font-size: 24px;
+    font-size: 12px;
     line-height: 34px;
     height: 50px;
     width: 40px;
@@ -27,6 +27,7 @@
     height: 105px;
     width: 85px;
     clip-path: polygon(0 0, 0 105px, 25px 105px, 25px 30px, 85px 30px, 85px 0);
+    font-size: 12px;
 }
 
 .zone-eleven {
@@ -37,12 +38,20 @@
     @extend %zone-edge;
     left: 85px;
     transform: scale(-1, 1);
+
+    .unskew {
+        transform: scale(-1, 1);
+    }
 }
 
 .zone-thirteen {
     @extend %zone-edge;
     top: 105px;
     transform: scale(1, -1);
+
+    .unskew {
+        transform: scale(1, -1);
+    }
 }
 
 .zone-fourteen {
@@ -50,6 +59,10 @@
     top: 105px;
     left: 85px;
     transform: scale(-1, -1);
+
+    .unskew {
+        transform: scale(-1, -1);
+    }
 }
 
 .full-zone {
