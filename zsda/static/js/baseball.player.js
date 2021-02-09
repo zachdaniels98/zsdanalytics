@@ -94,18 +94,36 @@ class PlayerInfo extends React.Component {
 }
 
 class ZoneSquare extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.props.onZoneSelect(this.props.zoneId);
+    }
+
     render() {
         return (
-            <button className="zone">{this.props.avg}</button>
+            <button className="zone" onClick={this.handleClick}>{this.props.avg}</button>
         )
     }
 }
 
 class ZoneEdge extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.props.onZoneSelect(this.props.zoneId);
+    }
+
     render() {
         return (
-            <button className={this.props.zoneNumber}>
-                <div className="unskew m-1 position-absolute top-0 start-0">{this.props.avg}</div>
+            <button className={this.props.className}>
+                <div className="unskew m-1 position-absolute top-0 start-0" onClick={this.handleClick}>{this.props.avg}</div>
             </button>
         )
     }
@@ -128,7 +146,10 @@ class Zone extends React.Component {
             for (let j = 0; j < 3; j++) {
                 let id = (3 * i) + (1 + j);
                 let idString = id.toString();
-                row.push(<ZoneSquare key={id} avg={this.getZoneAvg(idString)} />);
+                row.push(<ZoneSquare key={id} 
+                                    zoneId={idString} 
+                                    avg={this.getZoneAvg(idString)} 
+                                    onZoneSelect={this.props.onZoneSelect}/>);
             }
             zone.push(<div className="zone-row" key={i}>{row}</div>);
         }
@@ -138,10 +159,10 @@ class Zone extends React.Component {
     render() {
         return (
             <div className="full-zone">
-                <ZoneEdge zoneNumber="zone-eleven" avg={this.getZoneAvg('11')}/>
-                <ZoneEdge zoneNumber="zone-twelve" avg={this.getZoneAvg('12')}/>
-                <ZoneEdge zoneNumber="zone-thirteen" avg={this.getZoneAvg('13')}/>
-                <ZoneEdge zoneNumber="zone-fourteen" avg={this.getZoneAvg('14')}/>
+                <ZoneEdge className="zone-eleven" zoneId={'11'} avg={this.getZoneAvg('11')} onZoneSelect={this.props.onZoneSelect}/>
+                <ZoneEdge className="zone-twelve" zoneId={'12'} avg={this.getZoneAvg('12')} onZoneSelect={this.props.onZoneSelect}/>
+                <ZoneEdge className="zone-thirteen" zoneId={'13'} avg={this.getZoneAvg('13')} onZoneSelect={this.props.onZoneSelect}/>
+                <ZoneEdge className="zone-fourteen" zoneId={'14'} avg={this.getZoneAvg('14')} onZoneSelect={this.props.onZoneSelect}/>
                 <div className="inner-zone">
                     {this.renderZone()}
                 </div>
@@ -158,7 +179,7 @@ class Breakdown extends React.Component {
     }
     getBreakdownStats(field) {
         if (this.props.data) {
-            return this.props.data['total'][field];
+            return this.props.data[this.props.zoneSelect][field];
         }
         else {
             return '';
@@ -167,12 +188,12 @@ class Breakdown extends React.Component {
 
     getPitchDistribution() {
         if (this.props.data) {
-            const distribution = this.props.data['total']['pitch_type_count']
+            const distribution = this.props.data[this.props.zoneSelect]['pitch_type_count'];
             let pitchTypes = [];
             let pitchCounts = [];
             for (const pitchType in distribution) {
                 pitchTypes.push(<th scope="col" key={pitchType}>{pitchType}</th>);
-                pitchCounts.push(<td key={pitchType}>{distribution[pitchType]}</td>)
+                pitchCounts.push(<td key={pitchType}>{distribution[pitchType]}</td>);
             }
             return (
                 <table className="table">
@@ -195,7 +216,7 @@ class Breakdown extends React.Component {
             <div className="col d-flex justify content-center">
                 <div className="card text-center">
                     <div className="card-body">
-                        <h6 className="card-title">Zone Breakdown</h6>
+                        <h6 className="card-title">Zone Breakdown - {this.props.zoneSelect}</h6>
                         <table className="table">
                             <tbody>
                                 <tr>
@@ -227,8 +248,14 @@ class InteractiveBreakdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: null
+            data: null,
+            zoneSelect: 'total'
         };
+        this.selectZone = this.selectZone.bind(this);
+    }
+
+    selectZone(zoneId) {
+        this.setState({zoneSelect: zoneId});
     }
 
     componentDidMount() {
@@ -239,13 +266,17 @@ class InteractiveBreakdown extends React.Component {
     }
 
     render() {
+        const cardStyle = {
+            width: '24rem'
+        };
+
         return (
             <div className="row">
                 <div className="col">
-                    <Zone data={this.state.data}/>
+                    <Zone data={this.state.data} onZoneSelect={this.selectZone}/>
                 </div>
-                <div className="col m-2">
-                    <Breakdown data={this.state.data}/>
+                <div className="col m-2" style={cardStyle}>
+                    <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect}/>
                 </div>
             </div>
         )
