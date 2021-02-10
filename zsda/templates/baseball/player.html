@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <div class="col border d-flex justify-content-center">
+        <div class="col d-flex justify-content-center">
             <div class="card text-center">
                 <div class="card-body">
                     <h4 class="card-title">{{ info.first_name + " " + info.last_name }}</h4>
@@ -27,29 +27,13 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <!-- {% for statkey in stats.keys() %}
-                            {% if (loop.index - 1) % 10 == 0 %}
-                                <div class="col">
-                                    <table class="table">
-                                        <tbody>
-                            {% endif %}
-                                            <tr>
-                                                <th scope="row">{{ fields[statkey].abbr }}</th>
-                                                <td>{{ stats[statkey] }}</td>
-                                            </tr>
-                            {% if (loop.index - 1) % 10 == 9 or loop.last %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% endif %}
-                        {% endfor %} -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col border d-flex justify-content-center" id="strikezone"></div>
+        <div id="strikezone"></div>
     </div>
 </div>
 <script src="{{ url_for('static', filename='dist/baseball_player.bundle.js') }}"></script>

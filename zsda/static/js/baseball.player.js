@@ -185,6 +185,7 @@ class Breakdown extends React.Component {
 
         this.getPitchDistribution = this.getPitchDistribution.bind(this);
     }
+
     getBreakdownStats(field) {
         if (this.props.data) {
             return this.props.data[this.props.zoneSelect][field];
@@ -224,6 +225,7 @@ class Breakdown extends React.Component {
             <div className="col d-flex justify content-center">
                 <div className="card text-center">
                     <div className="card-body">
+                        <button type="reset" className="btn btn-primary" onClick={this.props.reset}>Reset</button>
                         <h6 className="card-title">Zone Breakdown - {this.props.zoneSelect}</h6>
                         <table className="table">
                             <tbody>
@@ -260,6 +262,7 @@ class InteractiveBreakdown extends React.Component {
             zoneSelect: 'total'
         };
         this.selectZone = this.selectZone.bind(this);
+        this.reset = this.reset.bind(this);
     }
 
     selectZone(zoneId) {
@@ -273,18 +276,22 @@ class InteractiveBreakdown extends React.Component {
             .then(data => this.setState({data: data}));
     }
 
+    reset() {
+        this.setState({zoneSelect: 'total'});
+    }
+
     render() {
         const cardStyle = {
             width: '24rem'
         };
 
         return (
-            <div className="row">
-                <div className="col">
-                    <Zone data={this.state.data} onZoneSelect={this.selectZone}/>
+            <div className="row border d-flex justify-content-evenly">
+                <div className="col-6">
+                    <Zone data={this.state.data} onZoneSelect={this.selectZone} />
                 </div>
-                <div className="col m-2" style={cardStyle}>
-                    <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect}/>
+                <div className="col-6" style={cardStyle}>
+                    <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.reset} />
                 </div>
             </div>
         )
@@ -292,13 +299,6 @@ class InteractiveBreakdown extends React.Component {
 }
 
 ReactDOM.render(
-    // <div className="full-zone">
-    //     <ZoneEdge zoneNumber="zone-eleven"/>
-    //     <ZoneEdge zoneNumber="zone-twelve"/>
-    //     <ZoneEdge zoneNumber="zone-thirteen"/>
-    //     <ZoneEdge zoneNumber="zone-fourteen"/>
-    //     <Zone />
-    // </div>,
     <InteractiveBreakdown />,
     document.getElementById('strikezone')
 );
