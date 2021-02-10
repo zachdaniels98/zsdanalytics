@@ -104,28 +104,17 @@ class ZoneSquare extends React.Component {
     }
 
     render() {
+        let interior;
+        if (this.props.isEdge) {
+            interior = <div className="unskew m-1 position-absolute top-0 start-0" onClick={this.handleClick}>{this.props.avg}</div>;
+        }
+        else {
+            interior = this.props.avg;
+        }
+
         return (
-            <button className="zone" onClick={this.handleClick}>{this.props.avg}</button>
-        )
-    }
-}
-
-class ZoneEdge extends React.Component {
-    constructor(props) {
-        super(props);
-        this.handleClick = this.handleClick.bind(this);
-    }
-
-    handleClick() {
-        this.props.onZoneSelect(this.props.zoneId);
-    }
-
-    render() {
-        return (
-            <button className={this.props.className}>
-                <div className="unskew m-1 position-absolute top-0 start-0" onClick={this.handleClick}>{this.props.avg}</div>
-            </button>
-        )
+            <button className={this.props.className} onClick={this.handleClick}>{interior}</button>
+        );
     }
 }
 
@@ -139,7 +128,7 @@ class Zone extends React.Component {
         }
     }
 
-    renderZone() {
+    renderInnerZone() {
         let zone = [];
         for (let i = 0; i < 3; i++) {
             let row = []
@@ -147,24 +136,43 @@ class Zone extends React.Component {
                 let id = (3 * i) + (1 + j);
                 let idString = id.toString();
                 row.push(<ZoneSquare key={id} 
+                                    className='zone'
                                     zoneId={idString} 
                                     avg={this.getZoneAvg(idString)} 
-                                    onZoneSelect={this.props.onZoneSelect}/>);
+                                    onZoneSelect={this.props.onZoneSelect}
+                                    isEdge={false} />);
             }
             zone.push(<div className="zone-row" key={i}>{row}</div>);
         }
         return zone;
     }
 
+    renderOuterZone() {
+        let corners = {
+            11: 'zone-eleven',
+            12: 'zone-twelve',
+            13: 'zone-thirteen',
+            14: 'zone-fourteen'
+        };
+        let edges = [];
+        for (var key in corners) {
+            let keyString = key.toString();
+            edges.push(<ZoneSquare key={key}
+                                className={corners[key]}
+                                zoneId={keyString}
+                                avg={this.getZoneAvg(keyString)}
+                                onZoneSelect={this.props.onZoneSelect}
+                                isEdge={true} />)
+        }
+        return edges;
+    }
+
     render() {
         return (
             <div className="full-zone">
-                <ZoneEdge className="zone-eleven" zoneId={'11'} avg={this.getZoneAvg('11')} onZoneSelect={this.props.onZoneSelect}/>
-                <ZoneEdge className="zone-twelve" zoneId={'12'} avg={this.getZoneAvg('12')} onZoneSelect={this.props.onZoneSelect}/>
-                <ZoneEdge className="zone-thirteen" zoneId={'13'} avg={this.getZoneAvg('13')} onZoneSelect={this.props.onZoneSelect}/>
-                <ZoneEdge className="zone-fourteen" zoneId={'14'} avg={this.getZoneAvg('14')} onZoneSelect={this.props.onZoneSelect}/>
+                {this.renderOuterZone()}
                 <div className="inner-zone">
-                    {this.renderZone()}
+                    {this.renderInnerZone()}
                 </div>
             </div>
         )
