@@ -119,9 +119,9 @@ class ZoneSquare extends React.Component {
 }
 
 class Zone extends React.Component {    
-    getZoneAvg(idString) {
+    getZoneValue(idString) {
         if (this.props.data) {
-            return this.props.data[idString]['avg'];
+            return this.props.data[idString][this.props.zoneValue];
         }
         else {
             return '';
@@ -138,7 +138,7 @@ class Zone extends React.Component {
                 row.push(<ZoneSquare key={id} 
                                     className='zone'
                                     zoneId={idString} 
-                                    avg={this.getZoneAvg(idString)} 
+                                    avg={this.getZoneValue(idString)} 
                                     onZoneSelect={this.props.onZoneSelect}
                                     isEdge={false} />);
             }
@@ -160,7 +160,7 @@ class Zone extends React.Component {
             edges.push(<ZoneSquare key={key}
                                 className={corners[key]}
                                 zoneId={keyString}
-                                avg={this.getZoneAvg(keyString)}
+                                avg={this.getZoneValue(keyString)}
                                 onZoneSelect={this.props.onZoneSelect}
                                 isEdge={true} />)
         }
@@ -254,15 +254,43 @@ class Breakdown extends React.Component {
     }
 }
 
+class ZoneValueSelect extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {value: 'avg'};
+        this.handleChange = this.handleChange.bind(this);
+    }
+    
+    handleChange(e) {
+        this.props.onZoneValueChange(e.target.value);
+        this.setState({value: e.target.value});
+    }
+
+    render() {
+        const selectWidth = {width: '170px'}
+
+        return (
+            <select className="form-select" style={selectWidth} aria-label="Zone value select" onChange={this.handleChange}>
+                <option value='avg'>Batting Avg</option>
+                <option value='pitch_count'>Pitch Count</option>
+                <option value='whiff'>Whiff %</option>
+            </select>
+        )
+    }
+}
+
 class InteractiveBreakdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             data: null,
-            zoneSelect: 'total'
+            zoneSelect: 'total',
+            zoneValue: 'avg'
         };
+
         this.selectZone = this.selectZone.bind(this);
-        this.reset = this.reset.bind(this);
+        this.resetBreakdown = this.resetBreakdown.bind(this);
+        this.setZoneValue = this.setZoneValue.bind(this);
     }
 
     selectZone(zoneId) {
@@ -276,8 +304,12 @@ class InteractiveBreakdown extends React.Component {
             .then(data => this.setState({data: data}));
     }
 
-    reset() {
+    resetBreakdown() {
         this.setState({zoneSelect: 'total'});
+    }
+
+    setZoneValue(value) {
+        this.setState({zoneValue: value});
     }
 
     render() {
@@ -288,10 +320,11 @@ class InteractiveBreakdown extends React.Component {
         return (
             <div className="row border d-flex justify-content-evenly">
                 <div className="col-6">
-                    <Zone data={this.state.data} onZoneSelect={this.selectZone} />
+                    <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
+                    <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
                 </div>
                 <div className="col-6" style={cardStyle}>
-                    <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.reset} />
+                    <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
                 </div>
             </div>
         )
