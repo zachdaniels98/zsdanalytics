@@ -245,11 +245,10 @@ class Breakdown extends React.Component {
 
     render() {
         return (
-            <div className="col d-flex justify content-center">
+            <div className="col d-flex justify-content-center">
                 <div className="card text-center">
                     <div className="card-body">
-                        <button type="reset" className="btn btn-primary" onClick={this.props.reset}>Reset</button>
-                        <h6 className="card-title">Zone Breakdown - {this.props.zoneSelect}</h6>
+                        <h6 className="col card-title">Zone Breakdown - {this.props.zoneSelect}</h6>
                         <table className="table">
                             <tbody>
                                 <tr>
@@ -270,6 +269,7 @@ class Breakdown extends React.Component {
                                 </tr>
                             </tbody>
                         </table>
+                        <button type="reset" className="btn btn-primary" onClick={this.props.reset}>Reset</button>
                     </div>
                 </div>
             </div>
@@ -280,32 +280,39 @@ class Breakdown extends React.Component {
 class BreakdownFilter extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {useCount: true};
+        this.state = {useCount: this.props.params.count};
         this.handleCountChange = this.handleCountChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleCountChange() {
         this.setState(prevState => ({useCount: !prevState.useCount}));
     }
 
+    handleSubmit(e) {
+        e.preventDefault();
+    }
+
     render() {
         return (
             <form className="row g-1">
                 <div className="col-4">
-                    <label className="form-label" htmlFor="hands">Batter Handedness</label>
-                    <select className="form-select" id="hands">
-                        <option value="both">All Batters</option>
-                        <option value="left">Left Handed</option>
-                        <option value="right">Right Handed</option>
+                    <label className="form-label" htmlFor="stand">Batter Handedness</label>
+                    <select className="form-select" id="stand" name="stand" defaultValue={this.props.params.stand}>
+                        <option value="b">All Batters</option>
+                        <option value="l">Left Handed</option>
+                        <option value="r">Right Handed</option>
                     </select>
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="setCount">Set Count?</label>
-                    <input className="form-check-input" type="checkbox" id="setCount" onChange={this.handleCountChange}/>
+                    <input className="form-check-input" type="checkbox" id="setCount" name="count"
+                        onChange={this.handleCountChange}
+                        defaultChecked={this.state.useCount} />
                 </div>
                 <div className="col-2">
                     <label className="form-label" htmlFor="balls">Balls</label>
-                    <select className="form-select" id="balls" disabled={this.state.useCount}>
+                    <select className="form-select" id="balls" name="balls" defaultValue={this.props.params.balls} disabled={!this.state.useCount}>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -314,7 +321,7 @@ class BreakdownFilter extends React.Component {
                 </div>
                 <div className="col-2">
                     <label className="form-label" htmlFor="strikes">Strikes</label>
-                    <select className="form-select" id="strikes" disabled={this.state.useCount}>
+                    <select className="form-select" id="strikes" name="strikes" defaultValue={this.props.params.strikes} disabled={!this.state.useCount}>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -322,8 +329,8 @@ class BreakdownFilter extends React.Component {
                 </div>
                 <div className="col-6">
                     <label className="form-label" htmlFor="inning">Inning</label>
-                    <select className="form-select" id="inning">
-                        <option value="all">All Innings</option>
+                    <select className="form-select" id="inning" name="inn" defaultValue={this.props.params.inn}>
+                        <option value="a">All Innings</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -337,23 +344,23 @@ class BreakdownFilter extends React.Component {
                 </div>
                 <div className="col-6">
                     <label className="form-label" htmlFor="homeAway">Home or Away</label>
-                    <select className="form-select" id="homeAway">
-                        <option value="all">All Games</option>
-                        <option value="home">Home Games</option>
-                        <option value="away">Away Games</option>
+                    <select className="form-select" id="homeAway" name="field" defaultValue={this.props.params.field}>
+                        <option value="b">All Games</option>
+                        <option value="h">Home Games</option>
+                        <option value="a">Away Games</option>
                     </select>
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="firstBase">1B</label>
-                    <input className="form-check-input" type="checkbox" id="firstBase" />
+                    <input className="form-check-input" type="checkbox" id="firstBase" name="1b" defaultChecked={this.props.params.first} />
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="secondBase">2B</label>
-                    <input className="form-check-input" type="checkbox" id="secondBase" />
+                    <input className="form-check-input" type="checkbox" id="secondBase" name="2b" defaultChecked={this.props.params.second} />
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="thirdBase">3B</label>
-                    <input className="form-check-input" type="checkbox" id="thirdBase" />
+                    <input className="form-check-input" type="checkbox" id="thirdBase" name="3b" defaultChecked={this.props.params.third} />
                 </div>
                 <div className="col-12">
                     <button className="btn btn-primary" type="submit">Submit Filters</button>
@@ -369,7 +376,18 @@ class InteractiveBreakdown extends React.Component {
         this.state = {
             data: null,
             zoneSelect: 'total',
-            zoneValue: 'avg'
+            zoneValue: 'avg',
+            params: {
+                stand: 'b',
+                count: false,
+                balls: '0',
+                strikes: '0',
+                inn: 'a',
+                field: 'b',
+                first: false,
+                second: false,
+                third: false
+            }
         };
 
         this.selectZone = this.selectZone.bind(this);
@@ -402,7 +420,7 @@ class InteractiveBreakdown extends React.Component {
         };
 
         return (
-            <div className="row border d-flex justify-content-center">
+            <div className="row border">
                 <div className="col">
                     <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                     <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
@@ -411,7 +429,7 @@ class InteractiveBreakdown extends React.Component {
                     <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
                 </div>
                 <div className="col">
-                    <BreakdownFilter />
+                    <BreakdownFilter params={this.state.params} />
                 </div>
             </div>
         )
