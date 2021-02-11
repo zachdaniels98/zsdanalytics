@@ -179,6 +179,29 @@ class Zone extends React.Component {
     }
 }
 
+class ZoneValueSelect extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
+    
+    handleChange(e) {
+        this.props.onZoneValueChange(e.target.value);
+    }
+
+    render() {
+        const selectWidth = {width: '170px'}
+
+        return (
+            <select className="form-select mt-4" style={selectWidth} aria-label="Zone value select" onChange={this.handleChange}>
+                <option value='avg'>Batting Avg</option>
+                <option value='pitch_count'>Pitch Count</option>
+                <option value='whiff'>Whiff %</option>
+            </select>
+        )
+    }
+}
+
 class Breakdown extends React.Component {
     constructor(props) {
         super(props);
@@ -254,27 +277,88 @@ class Breakdown extends React.Component {
     }
 }
 
-class ZoneValueSelect extends React.Component {
+class BreakdownFilter extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {value: 'avg'};
-        this.handleChange = this.handleChange.bind(this);
+        this.state = {useCount: true};
+        this.handleCountChange = this.handleCountChange.bind(this);
     }
-    
-    handleChange(e) {
-        this.props.onZoneValueChange(e.target.value);
-        this.setState({value: e.target.value});
+
+    handleCountChange() {
+        this.setState(prevState => ({useCount: !prevState.useCount}));
     }
 
     render() {
-        const selectWidth = {width: '170px'}
-
         return (
-            <select className="form-select" style={selectWidth} aria-label="Zone value select" onChange={this.handleChange}>
-                <option value='avg'>Batting Avg</option>
-                <option value='pitch_count'>Pitch Count</option>
-                <option value='whiff'>Whiff %</option>
-            </select>
+            <form className="row g-1">
+                <div className="col-4">
+                    <label className="form-label" htmlFor="hands">Batter Handedness</label>
+                    <select className="form-select" id="hands">
+                        <option value="both">All Batters</option>
+                        <option value="left">Left Handed</option>
+                        <option value="right">Right Handed</option>
+                    </select>
+                </div>
+                <div className="form-check col-4">
+                    <label className="form-check-label" htmlFor="setCount">Set Count?</label>
+                    <input className="form-check-input" type="checkbox" id="setCount" onChange={this.handleCountChange}/>
+                </div>
+                <div className="col-2">
+                    <label className="form-label" htmlFor="balls">Balls</label>
+                    <select className="form-select" id="balls" disabled={this.state.useCount}>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div className="col-2">
+                    <label className="form-label" htmlFor="strikes">Strikes</label>
+                    <select className="form-select" id="strikes" disabled={this.state.useCount}>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+                <div className="col-6">
+                    <label className="form-label" htmlFor="inning">Inning</label>
+                    <select className="form-select" id="inning">
+                        <option value="all">All Innings</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+                <div className="col-6">
+                    <label className="form-label" htmlFor="homeAway">Home or Away</label>
+                    <select className="form-select" id="homeAway">
+                        <option value="all">All Games</option>
+                        <option value="home">Home Games</option>
+                        <option value="away">Away Games</option>
+                    </select>
+                </div>
+                <div className="form-check col-4">
+                    <label className="form-check-label" htmlFor="firstBase">1B</label>
+                    <input className="form-check-input" type="checkbox" id="firstBase" />
+                </div>
+                <div className="form-check col-4">
+                    <label className="form-check-label" htmlFor="secondBase">2B</label>
+                    <input className="form-check-input" type="checkbox" id="secondBase" />
+                </div>
+                <div className="form-check col-4">
+                    <label className="form-check-label" htmlFor="thirdBase">3B</label>
+                    <input className="form-check-input" type="checkbox" id="thirdBase" />
+                </div>
+                <div className="col-12">
+                    <button className="btn btn-primary" type="submit">Submit Filters</button>
+                </div>
+            </form>
         )
     }
 }
@@ -318,13 +402,16 @@ class InteractiveBreakdown extends React.Component {
         };
 
         return (
-            <div className="row border d-flex justify-content-evenly">
-                <div className="col-6">
+            <div className="row border d-flex justify-content-center">
+                <div className="col">
                     <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                     <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
                 </div>
-                <div className="col-6" style={cardStyle}>
+                <div className="col" style={cardStyle}>
                     <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
+                </div>
+                <div className="col">
+                    <BreakdownFilter />
                 </div>
             </div>
         )
