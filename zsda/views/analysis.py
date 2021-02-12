@@ -4,9 +4,9 @@ import json
 
 def zone_analysis(pitch_data):
     data = pd.read_json(json.dumps(pitch_data), orient='records')
-    zones = data['zone'].unique().tolist()
+    if data.empty:
+        return no_data()
     events = data['events'].unique().tolist()
-    zones.sort()
     complete = {}
     tot_stats = {}
     tot_stats['pitch_count'] = len(data.index)
@@ -14,6 +14,7 @@ def zone_analysis(pitch_data):
     tot_stats['avg'] = get_avg(data)
     tot_stats['whiff'] = get_whiff(data)
     complete['total'] = tot_stats
+    zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
     for zone in zones:
         zone_data = data[data['zone'] == zone]
         zone_stats = {}
@@ -41,12 +42,38 @@ def get_avg(data):
     ab_data = data[data['events'].isin(at_bats)]
     hit_data = data[data['events'].isin(hits)]
 
-    avg = len(hit_data.index) / len(ab_data.index)
+    avg = None
+    if ab_data.empty:
+        avg = 0.0
+    else:
+        avg = len(hit_data.index) / len(ab_data.index)
     return round(avg, 3)
 
 def get_whiff(data):
     miss = ['missed_blunt', 'swinging_strike', 'swinging_strike_blocked']
     swing_data = data[data['result'].isin(['X', 'S'])]
     miss_data = data[data['description'].isin(miss)]
-    whiff = len(miss_data.index) / len(swing_data.index)
+    whiff = None
+    if swing_data.empty:
+        whiff = 0.0
+    else:
+        whiff = len(miss_data.index) / len(swing_data.index)
     return round(whiff, 3)
+
+def no_data():
+    complete = {}
+    tot_stats = {}
+    tot_stats['pitch_count'] = 0
+    tot_stats['pitch_type_count'] = 0
+    tot_stats['avg'] = 0
+    tot_stats['whiff'] = 0
+    complete['total'] = tot_stats
+    zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
+    for zone in zones:
+        zone_stats = {}
+        zone_stats['pitch_count'] = 0
+        zone_stats['pitch_type_count'] = 0
+        zone_stats['avg'] = 0
+        zone_stats['whiff'] = 0
+        complete[zone] = zone_stats
+    return complete

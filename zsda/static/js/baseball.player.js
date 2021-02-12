@@ -289,9 +289,9 @@ class BreakdownFilter extends React.Component {
     }
 
     componentDidMount() {
-        let paramCount = new URLSearchParams(window.location.search).get('count');
+        let paramCount = new URLSearchParams(window.location.search).get('balls');
         if (paramCount) {
-            this.setState({count: paramCount});
+            this.setState({count: true});
         }
     }
 
@@ -303,16 +303,16 @@ class BreakdownFilter extends React.Component {
                 <div className="col-4">
                     <label className="form-label" htmlFor="stand">Batter Handedness</label>
                     <select className="form-select" id="stand" name="stand" defaultValue={params.get('stand')}>
-                        <option value="b">All Batters</option>
+                        <option value="">All Batters</option>
                         <option value="l">Left Handed</option>
                         <option value="r">Right Handed</option>
                     </select>
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="setCount">Set Count?</label>
-                    <input className="form-check-input" type="checkbox" id="setCount" name="count"
+                    <input className="form-check-input" type="checkbox" id="setCount"
                         onChange={this.handleCount}
-                        defaultChecked={params.get('count')} />
+                        defaultChecked={params.get('balls')} />
                 </div>
                 <div className="col-2">
                     <label className="form-label" htmlFor="balls">Balls</label>
@@ -331,10 +331,10 @@ class BreakdownFilter extends React.Component {
                         <option value="2">2</option>
                     </select>
                 </div>
-                <div className="col-6">
+                <div className="col-4">
                     <label className="form-label" htmlFor="inning">Inning</label>
-                    <select className="form-select" id="inning" name="inn" defaultValue={params.get('inn')}>
-                        <option value="a">All Innings</option>
+                    <select className="form-select" id="inning" name="inning" defaultValue={params.get('inning')}>
+                        <option value="">Select Inning</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -346,10 +346,19 @@ class BreakdownFilter extends React.Component {
                         <option value="9">9</option>
                     </select>
                 </div>
-                <div className="col-6">
+                <div className="col-4">
+                    <label className="form-label" htmlFor="outs">Outs</label>
+                    <select className="form-select" id="outs" name="outs" defaultValue={params.get('outs')}>
+                        <option value="">Select # of Outs</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </div>
+                <div className="col-4">
                     <label className="form-label" htmlFor="homeAway">Home or Away</label>
                     <select className="form-select" id="homeAway" name="field" defaultValue={params.get('field')}>
-                        <option value="b">All Games</option>
+                        <option value="">All Games</option>
                         <option value="h">Home Games</option>
                         <option value="a">Away Games</option>
                     </select>
@@ -393,7 +402,8 @@ class InteractiveBreakdown extends React.Component {
     }
 
     componentDidMount() {
-        const api_url = 'http://127.0.0.1:5000/baseball/api/player/477132/zone-breakdown/0';
+        const params = new URLSearchParams(window.location.search);
+        const api_url = 'http://127.0.0.1:5000/baseball/api/player/477132/zone-breakdown/0?' + params.toString();
         fetch(api_url)
             .then(response => response.json())
             .then(data => this.setState({data: data}));

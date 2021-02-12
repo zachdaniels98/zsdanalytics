@@ -65,7 +65,29 @@ def adv_bat_stat(player_id):
 # position, pitch-type, stand
 @bp.route('/player/<int:player_id>/zone-breakdown/<int:position>', methods=['GET'])
 def zone_breakdown(player_id, position):
-    test_arg = request.args.get('test')
+    args = request.args
+    conditions = ''
+    for arg in args:
+        col = arg
+        val = args.get(arg)
+        if val == '':
+            continue
+        elif col == 'stand':
+            conditions += f'\nAND {col} = \'{val}\''
+            continue
+        elif col == 'outs':
+            col = 'outs_when_up'
+        elif col in ['1b', '2b', '3b']:
+            col = 'on_' + arg
+            conditions += f'\nAND {col} != 0'
+            continue
+        elif col == 'field':
+            col = 'topbot'
+            if val == 'a':
+                val = "'bot'"
+            else:
+                val = "'top'"
+        conditions += f'\nAND {col} = {val}'
     breakdown_type = None
     if position == 0:
         breakdown_type = 'pitcher'
@@ -75,8 +97,10 @@ def zone_breakdown(player_id, position):
     query = '''
         SELECT game_pk, sv_id, pitch_type, events, description, zone, stand, result, balls, strikes
         FROM pitch
-        WHERE {0} = {1};
-        '''.format(breakdown_type, player_id)
+        WHERE {0} = {1}
+        {2};
+        '''.format(breakdown_type, player_id, conditions)
+    print(query)
     cursor.execute(query)
     stats = cursor.fetchall()
     cursor.close()
