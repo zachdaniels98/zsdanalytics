@@ -280,25 +280,29 @@ class Breakdown extends React.Component {
 class BreakdownFilter extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {useCount: this.props.params.count};
-        this.handleCountChange = this.handleCountChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.state = {count: false};
+        this.handleCount = this.handleCount.bind(this);
     }
 
-    handleCountChange() {
-        this.setState(prevState => ({useCount: !prevState.useCount}));
+    handleCount() {
+        this.setState(prevState => ({count: !prevState.count}));
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
+    componentDidMount() {
+        let paramCount = new URLSearchParams(window.location.search).get('count');
+        if (paramCount) {
+            this.setState({count: paramCount});
+        }
     }
 
     render() {
+        const params = new URLSearchParams(window.location.search);
+
         return (
             <form className="row g-1">
                 <div className="col-4">
                     <label className="form-label" htmlFor="stand">Batter Handedness</label>
-                    <select className="form-select" id="stand" name="stand" defaultValue={this.props.params.stand}>
+                    <select className="form-select" id="stand" name="stand" defaultValue={params.get('stand')}>
                         <option value="b">All Batters</option>
                         <option value="l">Left Handed</option>
                         <option value="r">Right Handed</option>
@@ -307,12 +311,12 @@ class BreakdownFilter extends React.Component {
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="setCount">Set Count?</label>
                     <input className="form-check-input" type="checkbox" id="setCount" name="count"
-                        onChange={this.handleCountChange}
-                        defaultChecked={this.state.useCount} />
+                        onChange={this.handleCount}
+                        defaultChecked={params.get('count')} />
                 </div>
                 <div className="col-2">
                     <label className="form-label" htmlFor="balls">Balls</label>
-                    <select className="form-select" id="balls" name="balls" defaultValue={this.props.params.balls} disabled={!this.state.useCount}>
+                    <select className="form-select" id="balls" name="balls" defaultValue={params.get('balls')} disabled={!this.state.count}>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -321,7 +325,7 @@ class BreakdownFilter extends React.Component {
                 </div>
                 <div className="col-2">
                     <label className="form-label" htmlFor="strikes">Strikes</label>
-                    <select className="form-select" id="strikes" name="strikes" defaultValue={this.props.params.strikes} disabled={!this.state.useCount}>
+                    <select className="form-select" id="strikes" name="strikes" defaultValue={params.get('strikes')} disabled={!this.state.count}>
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -329,7 +333,7 @@ class BreakdownFilter extends React.Component {
                 </div>
                 <div className="col-6">
                     <label className="form-label" htmlFor="inning">Inning</label>
-                    <select className="form-select" id="inning" name="inn" defaultValue={this.props.params.inn}>
+                    <select className="form-select" id="inning" name="inn" defaultValue={params.get('inn')}>
                         <option value="a">All Innings</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -344,7 +348,7 @@ class BreakdownFilter extends React.Component {
                 </div>
                 <div className="col-6">
                     <label className="form-label" htmlFor="homeAway">Home or Away</label>
-                    <select className="form-select" id="homeAway" name="field" defaultValue={this.props.params.field}>
+                    <select className="form-select" id="homeAway" name="field" defaultValue={params.get('field')}>
                         <option value="b">All Games</option>
                         <option value="h">Home Games</option>
                         <option value="a">Away Games</option>
@@ -352,17 +356,17 @@ class BreakdownFilter extends React.Component {
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="firstBase">1B</label>
-                    <input className="form-check-input" type="checkbox" id="firstBase" name="1b" defaultChecked={this.props.params.first} />
+                    <input className="form-check-input" type="checkbox" id="firstBase" name="1b" defaultChecked={params.get('1b')} />
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="secondBase">2B</label>
-                    <input className="form-check-input" type="checkbox" id="secondBase" name="2b" defaultChecked={this.props.params.second} />
+                    <input className="form-check-input" type="checkbox" id="secondBase" name="2b" defaultChecked={params.get('2b')} />
                 </div>
                 <div className="form-check col-4">
                     <label className="form-check-label" htmlFor="thirdBase">3B</label>
-                    <input className="form-check-input" type="checkbox" id="thirdBase" name="3b" defaultChecked={this.props.params.third} />
+                    <input className="form-check-input" type="checkbox" id="thirdBase" name="3b" defaultChecked={params.get('3b')} />
                 </div>
-                <div className="col-12">
+                <div className="col-12 justify-content-center">
                     <button className="btn btn-primary" type="submit">Submit Filters</button>
                 </div>
             </form>
@@ -377,17 +381,6 @@ class InteractiveBreakdown extends React.Component {
             data: null,
             zoneSelect: 'total',
             zoneValue: 'avg',
-            params: {
-                stand: 'b',
-                count: false,
-                balls: '0',
-                strikes: '0',
-                inn: 'a',
-                field: 'b',
-                first: false,
-                second: false,
-                third: false
-            }
         };
 
         this.selectZone = this.selectZone.bind(this);
@@ -429,7 +422,7 @@ class InteractiveBreakdown extends React.Component {
                     <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
                 </div>
                 <div className="col">
-                    <BreakdownFilter params={this.state.params} />
+                    <BreakdownFilter />
                 </div>
             </div>
         )
