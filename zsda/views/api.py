@@ -10,6 +10,31 @@ bp = Blueprint('baseball_api', __name__, url_prefix='/baseball/api')
 def commands():
     return 'List of API Commands'
 
+# Get list of up to 10 players and their player IDs where either first or last names have a partial match
+@bp.route('/players/<string:name>', methods=['GET'])
+def players(name):
+    name += '%'
+    if ' ' in name:
+        fname, lname = name.split()
+        full = 'AND'
+    else:
+        fname = name
+        lname = name
+        full = 'OR'
+    query = '''
+            SELECT player_id, first_name, last_name 
+            FROM player 
+            WHERE first_name LIKE '{}' {} last_name LIKE '{}' LIMIT 10;
+            '''.format(fname, full, lname)
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute(query)
+    stats = cursor.fetchall()
+    cursor.close()
+    cleaned = {}
+    for p in stats:
+        cleaned[p['first_name'] + ' ' + p['last_name']] = {'player_id': p['player_id']}
+    return cleaned
+
 # Get player info
 # player_id
 # first_name
@@ -19,7 +44,7 @@ def commands():
 @bp.route('/player/<int:player_id>', methods=['GET'])
 def player(player_id):
     cursor = get_db().cursor(dictionary=True)
-    cursor.execute('SELECT * FROM player WHERE player_id = %s', (player_id,))
+    cursor.execute('SELECT * FROM player WHERE player_id = %s;', (player_id,))
     stats = cursor.fetchone()
     cursor.close()
     return stats
@@ -28,7 +53,7 @@ def player(player_id):
 @bp.route('/player/<int:player_id>/pitch-stat', methods=['GET'])
 def pitch_stat(player_id):
     cursor = get_db().cursor(dictionary=True)
-    cursor.execute('SELECT * FROM pitch_stat WHERE player_id = %s', (player_id,))
+    cursor.execute('SELECT * FROM pitch_stat WHERE player_id = %s;', (player_id,))
     stats = cursor.fetchone()
     cursor.close()
     return stats
@@ -37,7 +62,7 @@ def pitch_stat(player_id):
 @bp.route('/player/<int:player_id>/adv-pitch-stat', methods=['GET'])
 def adv_pitch_stat(player_id):
     cursor = get_db().cursor(dictionary=True)
-    cursor.execute('SELECT * FROM adv_pitch_stat WHERE player_id = %s', (player_id,))
+    cursor.execute('SELECT * FROM adv_pitch_stat WHERE player_id = %s;', (player_id,))
     stats = cursor.fetchone()
     cursor.close()
     return stats
@@ -46,7 +71,7 @@ def adv_pitch_stat(player_id):
 @bp.route('/player/<int:player_id>/bat-stat', methods=['GET'])
 def bat_stat(player_id):
     cursor = get_db().cursor(dictionary=True)
-    cursor.execute('SELECT * FROM bat_stat WHERE player_id = %s', (player_id,))
+    cursor.execute('SELECT * FROM bat_stat WHERE player_id = %s;', (player_id,))
     stats = cursor.fetchone()
     cursor.close()
     return stats
@@ -55,7 +80,7 @@ def bat_stat(player_id):
 @bp.route('/player/<int:player_id>/adv-bat-stat', methods=['GET'])
 def adv_bat_stat(player_id):
     cursor = get_db().cursor(dictionary=True)
-    cursor.execute('SELECT * FROM adv_bat_stat WHERE player_id = %s', (player_id,))
+    cursor.execute('SELECT * FROM adv_bat_stat WHERE player_id = %s;', (player_id,))
     stats = cursor.fetchone()
     cursor.close()
     return stats
@@ -100,7 +125,6 @@ def zone_breakdown(player_id, position):
         WHERE {0} = {1}
         {2};
         '''.format(breakdown_type, player_id, conditions)
-    print(query)
     cursor.execute(query)
     stats = cursor.fetchall()
     cursor.close()

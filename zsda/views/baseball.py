@@ -6,16 +6,24 @@ from .shared import fields
 
 bp = Blueprint('baseball', __name__, url_prefix='/baseball')
 
+def get_player_id(player_name):
+    first_name, last_name = player_name.split()
+    cursor = get_db().cursor(dictionary=True)
+    cursor.execute('SELECT player_id FROM player WHERE first_name = %s AND last_name = %s', (first_name, last_name,))
+    pid = cursor.fetchone()
+    cursor.close()
+    return pid
+
 @bp.route('/', methods=('GET', 'POST'))
 def home():
     if request.method == 'POST':
-        return redirect(url_for('baseball.player', player_id=0))
+        player_name = request.form.get("player-name")
+        player_id = get_player_id(player_name)['player_id']
+        return redirect(url_for('baseball.player', player_id=player_id))
     return render_template('baseball/home.html')
 
 @bp.route('/player/<int:player_id>', methods=('GET',))
 def player(player_id):
-    # TEST
-    player_id = 477132
     cursor = get_db().cursor(dictionary=True)
     cursor.execute('SELECT * FROM player WHERE player_id = %s', (player_id,))
     info = cursor.fetchone()
