@@ -14,15 +14,16 @@ def get_player_id(player_name):
     cursor.close()
     return pid
 
-@bp.route('/', methods=('GET', 'POST'))
+@bp.route('/', methods=['GET'])
 def home():
-    if request.method == 'POST':
-        player_name = request.form.get("player-name")
-        player_id = get_player_id(player_name)['player_id']
-        return redirect(url_for('baseball.player', player_id=player_id))
+    if request.method == 'GET':
+        player_name = request.args.get("player-name")
+        if player_name:
+            player_id = get_player_id(player_name)['player_id']
+            return redirect(url_for('baseball.player', player_id=player_id))
     return render_template('baseball/home.html')
 
-@bp.route('/player/<int:player_id>', methods=('GET',))
+@bp.route('/player/<int:player_id>', methods=['GET'])
 def player(player_id):
     cursor = get_db().cursor(dictionary=True)
     cursor.execute('SELECT * FROM player WHERE player_id = %s', (player_id,))

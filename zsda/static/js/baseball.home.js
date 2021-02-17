@@ -53,7 +53,7 @@ class Suggestions extends React.Component {
 class PlayerSearch extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {data: null, value: '', autocomplete: false};
+        this.state = {data: {}, value: '', autocomplete: false};
         this.handleChange = this.handleChange.bind(this);
         this.autoComplete = this.autoComplete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -84,21 +84,20 @@ class PlayerSearch extends React.Component {
 
     componentDidUpdate(_prevProps, prevState) {
         if (this.state.autocomplete) {
-            console.log(this.state.value);
             let playerForm = document.getElementById("player-search");
             playerForm.requestSubmit();
         } else if (this.state.value !== prevState.value) {
             if (this.state.value.length >= 2) {
                 this.fetchData();
             } else {
-                this.setState({data: null});
+                this.setState({data: {}});
             }
         }
     }
 
     render() {
         return (
-            <form method="POST" id="player-search" onSubmit={this.handleSubmit}>
+            <form id="player-search" onSubmit={this.handleSubmit}>
                 <label className="form-label" htmlFor="playerName">Player Search</label>
                 <div className="row">
                     <div className="col-8">
