@@ -53,7 +53,7 @@ class Suggestions extends React.Component {
 class PlayerSearch extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {data: null, value: ''};
+        this.state = {data: null, value: '', autocomplete: false};
         this.handleChange = this.handleChange.bind(this);
         this.autoComplete = this.autoComplete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -65,11 +65,11 @@ class PlayerSearch extends React.Component {
     }
 
     autoComplete(e) {
-        this.setState({value: e.target.value});
+        this.setState({value: e.target.value, autocomplete: true});
     }
 
     handleSubmit(e) {
-        if (Object.keys(this.state.data).length != 1) {
+        if (Object.keys(this.state.data).length != 1 && !this.state.autocomplete) {
             alert('Please enter valid name');
             e.preventDefault();
         }
@@ -83,7 +83,11 @@ class PlayerSearch extends React.Component {
     }
 
     componentDidUpdate(_prevProps, prevState) {
-        if (this.state.value !== prevState.value) {
+        if (this.state.autocomplete) {
+            console.log(this.state.value);
+            let playerForm = document.getElementById("player-search");
+            playerForm.requestSubmit();
+        } else if (this.state.value !== prevState.value) {
             if (this.state.value.length >= 2) {
                 this.fetchData();
             } else {
@@ -98,7 +102,7 @@ class PlayerSearch extends React.Component {
                 <label className="form-label" htmlFor="playerName">Player Search</label>
                 <div className="row">
                     <div className="col-8">
-                        <input className="form-control" type="search" name="player-name" id="playerName" value={this.state.value} onChange={this.handleChange} placeholder="Enter Player Name..." />
+                        <input className="form-control" type="search" name="player-name" id="playerName" value={this.state.value} onChange={this.handleChange} placeholder="Enter Player Name" />
                         <Suggestions data={this.state.data} autoComplete={this.autoComplete} />
                     </div>
                     <div className="col">
