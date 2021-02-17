@@ -424,20 +424,28 @@ class InteractiveBreakdown extends React.Component {
             width: '24rem'
         };
 
-        return (
-            <div className="row border">
-                <div className="col">
-                    <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
-                    <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
+        if (this.state.data) {
+            return (
+                <div className="row border">
+                    <div className="col">
+                        <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
+                        <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
+                    </div>
+                    <div className="col" style={cardStyle}>
+                        <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
+                    </div>
+                    <div className="col">
+                        <BreakdownFilter />
+                    </div>
                 </div>
-                <div className="col" style={cardStyle}>
-                    <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
+            )
+        } else {
+            return (
+                <div className="row">
+                    <div className="text-center fs-1">Loading...</div>
                 </div>
-                <div className="col">
-                    <BreakdownFilter />
-                </div>
-            </div>
-        )
+            )
+        }
     }
 }
 

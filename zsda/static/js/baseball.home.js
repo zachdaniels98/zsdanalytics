@@ -28,19 +28,25 @@ class Suggestions extends React.Component {
         for (let key in this.props.data) {
             matches.push(<button type="button"
                                 value={key}
-                                className="list-group-item list-group-item-action"
+                                className="dropdown-item"
                                 key={this.props.data[key]['player_id']}
                                 onClick={this.handleClick}>
                                 {key}
                         </button>);
         }
-        return matches;
+        if (matches.length > 0) {
+            return (
+            <ul className="list-group dropdown-menu">{matches}</ul>
+            );
+        } else {
+            return '';
+        }
     }
 
     render() {
         return (
-            <ul className="list-group">{this.getMatches()}</ul>
-        )
+            <div className="dropdown">{this.getMatches()}</div>
+        );
     }
 }
 
@@ -80,8 +86,7 @@ class PlayerSearch extends React.Component {
         if (this.state.value !== prevState.value) {
             if (this.state.value.length >= 2) {
                 this.fetchData();
-            }
-            else {
+            } else {
                 this.setState({data: null});
             }
         }
@@ -89,10 +94,10 @@ class PlayerSearch extends React.Component {
 
     render() {
         return (
-            <form method="POST" onSubmit={this.handleSubmit}>
+            <form method="POST" id="player-search" onSubmit={this.handleSubmit}>
                 <label className="form-label" htmlFor="playerName">Player Search</label>
                 <div className="row">
-                    <div className="col">
+                    <div className="col-8">
                         <input className="form-control" type="search" name="player-name" id="playerName" value={this.state.value} onChange={this.handleChange} placeholder="Enter Player Name..." />
                         <Suggestions data={this.state.data} autoComplete={this.autoComplete} />
                     </div>
