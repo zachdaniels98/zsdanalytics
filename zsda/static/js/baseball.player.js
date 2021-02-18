@@ -105,26 +105,50 @@ class ZoneSquare extends React.Component {
 
     render() {
         let interior;
+
+        const colorStyle = this.props.background(this.props.value);
+
         if (this.props.isEdge) {
-            interior = <div className="unskew m-1 position-absolute top-0 start-0" onClick={this.handleClick}>{this.props.avg}</div>;
-        }
-        else {
-            interior = this.props.avg;
+            interior = <div className="unskew m-1 position-absolute top-0 start-0" onClick={this.handleClick}>{this.props.value}</div>;
+        } else {
+            interior = this.props.value;
         }
 
         return (
-            <button className={this.props.className} onClick={this.handleClick}>{interior}</button>
+            <button className={this.props.className} onClick={this.handleClick} style={colorStyle}>{interior}</button>
         );
     }
 }
 
-class Zone extends React.Component {    
+class Zone extends React.Component {
+    constructor(props) {
+        super(props);
+        this.getBackgroundColor = this.getBackgroundColor.bind(this);
+    }
     getZoneValue(idString) {
         if (this.props.data) {
             return this.props.data[idString][this.props.zoneValue];
-        }
-        else {
+        } else {
             return '';
+        }
+    }
+
+    getBackgroundColor(val) {
+        let dataCopy = Object.assign({}, this.props.data);
+        delete dataCopy['Total'];
+        let values = []
+        for (const idk in dataCopy) {
+            values.push(dataCopy[idk][this.props.zoneValue]);
+        }
+        values.sort((a, b) => a - b);
+        const min = values[0];
+        const max = values[values.length - 1];
+        const range = max - min;
+        let color = ((val - min) * 1.4) / (range) - 0.7;
+        if (val >= (min + max) / 2) {
+            return { backgroundColor: `rgba(255, 0, 0, ${color})`};
+        } else {
+            return { backgroundColor: `rgba(0, 0, 255, ${-color})`};
         }
     }
 
@@ -138,9 +162,9 @@ class Zone extends React.Component {
                 row.push(<ZoneSquare key={id} 
                                     className='zone'
                                     zoneId={idString} 
-                                    avg={this.getZoneValue(idString)} 
+                                    value={this.getZoneValue(idString)} 
                                     onZoneSelect={this.props.onZoneSelect}
-                                    isEdge={false} />);
+                                    isEdge={false} background={this.getBackgroundColor} />);
             }
             zone.push(<div className="zone-row" key={i}>{row}</div>);
         }
@@ -160,9 +184,9 @@ class Zone extends React.Component {
             edges.push(<ZoneSquare key={key}
                                 className={corners[key]}
                                 zoneId={keyString}
-                                avg={this.getZoneValue(keyString)}
+                                value={this.getZoneValue(keyString)}
                                 onZoneSelect={this.props.onZoneSelect}
-                                isEdge={true} />)
+                                isEdge={true} background={this.getBackgroundColor} />)
         }
         return edges;
     }
@@ -190,10 +214,10 @@ class ZoneValueSelect extends React.Component {
     }
 
     render() {
-        const selectWidth = {width: '170px'}
+        const selectWidth = {width: '8rem'};
 
         return (
-            <select className="form-select mt-4" style={selectWidth} aria-label="Zone value select" onChange={this.handleChange}>
+            <select className="form-control form-select mt-4" style={selectWidth} aria-label="Zone value select" onChange={this.handleChange}>
                 <option value='avg'>Batting Avg</option>
                 <option value='pitch_count'>Pitch Count</option>
                 <option value='whiff'>Whiff %</option>
@@ -388,7 +412,7 @@ class InteractiveBreakdown extends React.Component {
         super(props);
         this.state = {
             data: null,
-            zoneSelect: 'total',
+            zoneSelect: 'Total',
             zoneValue: 'avg',
         };
 
@@ -412,7 +436,7 @@ class InteractiveBreakdown extends React.Component {
     }
 
     resetBreakdown() {
-        this.setState({zoneSelect: 'total'});
+        this.setState({zoneSelect: 'Total'});
     }
 
     setZoneValue(value) {
@@ -427,14 +451,14 @@ class InteractiveBreakdown extends React.Component {
         if (this.state.data) {
             return (
                 <div className="row border">
-                    <div className="col">
+                    <div className="col d-flex flex-column align-items-center">
                         <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
                     </div>
-                    <div className="col" style={cardStyle}>
+                    <div className="col d-flex justify-content-center" style={cardStyle}>
                         <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
                     </div>
-                    <div className="col">
+                    <div className="col d-flex flex-column justify-content-center">
                         <BreakdownFilter />
                     </div>
                 </div>

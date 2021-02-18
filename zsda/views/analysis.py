@@ -13,7 +13,7 @@ def zone_analysis(pitch_data):
     tot_stats['pitch_type_count'] = get_pitch_type_count(data)
     tot_stats['avg'] = get_avg(data)
     tot_stats['whiff'] = get_whiff(data)
-    complete['total'] = tot_stats
+    complete['Total'] = tot_stats
     zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
     for zone in zones:
         zone_data = data[data['zone'] == zone]

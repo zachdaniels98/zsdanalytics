@@ -8,10 +8,10 @@
     background: #fff;
     border: 1px solid #999;
     float: left;
-    font-size: 12px;
+    font-size: 16px;
     line-height: 34px;
-    height: 50px;
-    width: 40px;
+    height: 80px;
+    width: 64px;
     // margin-right: -1px;
     // margin-top: -1px;
     padding: 0;
@@ -24,10 +24,10 @@
     border: 1px solid #999;
     // margin-bottom: -1px;
     // margin-right: -1px;
-    height: 105px;
-    width: 85px;
-    clip-path: polygon(0 0, 0 105px, 25px 105px, 25px 30px, 85px 30px, 85px 0);
-    font-size: 12px;
+    height: 168px;
+    width: 136px;
+    clip-path: polygon(0 0, 0 168px, 40px 168px, 40px 48px, 136px 48px, 136px 0);
+    font-size: 16px;
 }
 
 .zone-eleven {
@@ -36,7 +36,7 @@
 
 .zone-twelve {
     @extend %zone-edge;
-    left: 85px;
+    left: 136px;
     transform: scale(-1, 1);
 
     .unskew {
@@ -46,7 +46,7 @@
 
 .zone-thirteen {
     @extend %zone-edge;
-    top: 105px;
+    top: 168px;
     transform: scale(1, -1);
 
     .unskew {
@@ -56,8 +56,8 @@
 
 .zone-fourteen {
     @extend %zone-edge;
-    top: 105px;
-    left: 85px;
+    top: 168px;
+    left: 136px;
     transform: scale(-1, -1);
 
     .unskew {
@@ -69,12 +69,12 @@
     position: relative;
     margin-bottom: 2rem;
     margin-top: 1rem;
-    height: 210px;
-    width: 170px;
+    height: 336px;
+    width: 272px;
 }
 
 .inner-zone {
     position: absolute;
-    top: 30px;
-    left: 25px;
+    top: 48px;
+    left: 40px;
 }
