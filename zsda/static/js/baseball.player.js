@@ -271,7 +271,7 @@ class Breakdown extends React.Component {
 
     render() {
         return (
-            <div className="col d-flex justify-content-center">
+            <div className="col mt-5 d-flex flex-column align-items-center justify-content-center">
                 <div className="card text-center">
                     <div className="card-body">
                         <h6 className="col card-title">Zone Breakdown - {this.props.zoneSelect}</h6>
@@ -325,83 +325,96 @@ class BreakdownFilter extends React.Component {
         const params = new URLSearchParams(window.location.search);
 
         return (
-            <form className="row g-1">
-                <div className="col-4">
-                    <label className="form-label" htmlFor="stand">Batter Handedness</label>
-                    <select className="form-select" id="stand" name="stand" defaultValue={params.get('stand')}>
-                        <option value="">All Batters</option>
-                        <option value="l">Left Handed</option>
-                        <option value="r">Right Handed</option>
-                    </select>
+            <form className="d-flex flex-column mx-auto">
+                <div className="row mb-2">
+                    <div className="col-5">
+                        <label className="form-label" htmlFor="stand">Batter Handedness</label>
+                        <select className="form-select" id="stand" name="stand" defaultValue={params.get('stand')}>
+                            <option value="">All Batters</option>
+                            <option value="l">Left Handed</option>
+                            <option value="r">Right Handed</option>
+                        </select>
+                    </div>
+                    <div className="col d-flex align-items-center">
+                        <div className="form-check">
+                            <label className="form-check-label" htmlFor="setCount">Set Count?</label>
+                            <input className="form-check-input" type="checkbox" id="setCount"
+                                onChange={this.handleCount}
+                                defaultChecked={params.get('balls')} />
+                        </div>
+                    </div>
+                    <div className="col">
+                        <label className="form-label" htmlFor="balls">Balls</label>
+                        <select className="form-select" id="balls" name="balls" defaultValue={params.get('balls')} disabled={!this.state.count}>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                        </select>
+                    </div>
+                    <div className="col">
+                        <label className="form-label" htmlFor="strikes">Strikes</label>
+                        <select className="form-select" id="strikes" name="strikes" defaultValue={params.get('strikes')} disabled={!this.state.count}>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
                 </div>
-                <div className="form-check col-4">
-                    <label className="form-check-label" htmlFor="setCount">Set Count?</label>
-                    <input className="form-check-input" type="checkbox" id="setCount"
-                        onChange={this.handleCount}
-                        defaultChecked={params.get('balls')} />
+                <div className="row mb-2">
+                    <div className="col">
+                        <label className="form-label" htmlFor="inning">Inning</label>
+                        <select className="form-select" id="inning" name="inning" defaultValue={params.get('inning')}>
+                            <option value="">Select Inning</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                        </select>
+                    </div>
+                    <div className="col">
+                        <label className="form-label" htmlFor="outs">Outs</label>
+                        <select className="form-select" id="outs" name="outs" defaultValue={params.get('outs')}>
+                            <option value="">Select # of Outs</option>
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                        </select>
+                    </div>
                 </div>
-                <div className="col-2">
-                    <label className="form-label" htmlFor="balls">Balls</label>
-                    <select className="form-select" id="balls" name="balls" defaultValue={params.get('balls')} disabled={!this.state.count}>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                    </select>
+                <div className="row mb-2">
+                    <div className="col-4">
+                        <label className="form-label" htmlFor="homeAway">Home or Away</label>
+                        <select className="form-select" id="homeAway" name="field" defaultValue={params.get('field')}>
+                            <option value="">All Games</option>
+                            <option value="h">Home Games</option>
+                            <option value="a">Away Games</option>
+                        </select>
+                    </div>
+                    <div className="col">
+                        <label className="form-label" htmlFor="onBase">Runners on Base</label>
+                        <div id="onBase">
+                            <div className="form-check form-check-inline">
+                                <label className="form-check-label" htmlFor="firstBase">1B</label>
+                                <input className="form-check-input" type="checkbox" id="firstBase" name="1b" defaultChecked={params.get('1b')} />
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <label className="form-check-label" htmlFor="secondBase">2B</label>
+                                <input className="form-check-input" type="checkbox" id="secondBase" name="2b" defaultChecked={params.get('2b')} />
+                            </div>
+                            <div className="form-check form-check-inline">
+                                <label className="form-check-label" htmlFor="thirdBase">3B</label>
+                                <input className="form-check-input" type="checkbox" id="thirdBase" name="3b" defaultChecked={params.get('3b')} />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="col-2">
-                    <label className="form-label" htmlFor="strikes">Strikes</label>
-                    <select className="form-select" id="strikes" name="strikes" defaultValue={params.get('strikes')} disabled={!this.state.count}>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
-                <div className="col-4">
-                    <label className="form-label" htmlFor="inning">Inning</label>
-                    <select className="form-select" id="inning" name="inning" defaultValue={params.get('inning')}>
-                        <option value="">Select Inning</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                    </select>
-                </div>
-                <div className="col-4">
-                    <label className="form-label" htmlFor="outs">Outs</label>
-                    <select className="form-select" id="outs" name="outs" defaultValue={params.get('outs')}>
-                        <option value="">Select # of Outs</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </select>
-                </div>
-                <div className="col-4">
-                    <label className="form-label" htmlFor="homeAway">Home or Away</label>
-                    <select className="form-select" id="homeAway" name="field" defaultValue={params.get('field')}>
-                        <option value="">All Games</option>
-                        <option value="h">Home Games</option>
-                        <option value="a">Away Games</option>
-                    </select>
-                </div>
-                <div className="form-check col-4">
-                    <label className="form-check-label" htmlFor="firstBase">1B</label>
-                    <input className="form-check-input" type="checkbox" id="firstBase" name="1b" defaultChecked={params.get('1b')} />
-                </div>
-                <div className="form-check col-4">
-                    <label className="form-check-label" htmlFor="secondBase">2B</label>
-                    <input className="form-check-input" type="checkbox" id="secondBase" name="2b" defaultChecked={params.get('2b')} />
-                </div>
-                <div className="form-check col-4">
-                    <label className="form-check-label" htmlFor="thirdBase">3B</label>
-                    <input className="form-check-input" type="checkbox" id="thirdBase" name="3b" defaultChecked={params.get('3b')} />
-                </div>
-                <div className="col-12 justify-content-center">
+                <div className="row mx-auto">
                     <button className="btn btn-primary" type="submit">Submit Filters</button>
                 </div>
             </form>
@@ -452,11 +465,11 @@ class InteractiveBreakdown extends React.Component {
 
         if (this.state.data) {
             return (
-                <div className="row border custom-bg">
+                <div className="row border mt-2">
                     <div className="col d-flex justify-content-center" style={cardStyle}>
                         <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
                     </div>
-                    <div className="col d-flex flex-column align-items-center">
+                    <div className="col-3 d-flex flex-column align-items-center">
                         <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
                     </div>
@@ -481,7 +494,7 @@ ReactDOM.render(
 );
 
 ReactDOM.render(
-    <PlayerSearch />,
+    <PlayerSearch class="mb-3"/>,
     document.getElementById('newsearch')
 );
 

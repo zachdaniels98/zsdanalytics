@@ -87,7 +87,7 @@ class PlayerSearch extends React.Component {
 
     render() {
         return (
-            <form id="player-search" onSubmit={this.handleSubmit}>
+            <form id="player-search" onSubmit={this.handleSubmit} className={this.props.class}>
                 <label className="form-label" htmlFor="playerName">Player Search</label>
                 <div className="row">
                     <div className="col-8">
