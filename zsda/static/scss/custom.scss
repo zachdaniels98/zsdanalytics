@@ -1,3 +1,27 @@
+@import '../node_modules/bootstrap/scss/functions';
+@import '../node_modules/bootstrap/scss/variables';
+@import '../node_modules/bootstrap/scss/mixins';
+
+// body {
+//     position: relative;
+//     min-height: 100vh;
+//     background-color: $cyan-100;
+// }
+
+.custom-bg {
+    background-color: $cyan-100;
+}
+
+footer {
+    background-color: $cyan-800;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+}
+
 .zone-row:after {
     clear: both;
     content: "";

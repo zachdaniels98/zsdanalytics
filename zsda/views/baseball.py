@@ -7,7 +7,7 @@ from .shared import fields
 bp = Blueprint('baseball', __name__, url_prefix='/baseball')
 
 def get_player_id(player_name):
-    first_name, last_name = player_name.split()
+    first_name, last_name = player_name.rsplit(" ", 1)
     cursor = get_db().cursor(dictionary=True)
     cursor.execute('SELECT player_id FROM player WHERE first_name = %s AND last_name = %s', (first_name, last_name,))
     pid = cursor.fetchone()
@@ -33,4 +33,9 @@ def player(player_id):
     cursor.execute('SELECT * FROM adv_pitch_stat WHERE player_id = %s', (player_id,))
     adv_stats = cursor.fetchone()
     cursor.close()
+    if request.method == 'GET':
+        player_name = request.args.get("player-name")
+        if player_name:
+            player_id = get_player_id(player_name)['player_id']
+            return redirect(url_for('baseball.player', player_id=player_id))
     return render_template('baseball/player.html', info=info, stats=stats, adv_stats=adv_stats, fields=fields)

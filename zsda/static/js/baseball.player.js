@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PlayerSearch from './baseball.components';
 import '../scss/custom.scss';
 
 class PlayerInfo extends React.Component {
@@ -125,6 +126,7 @@ class Zone extends React.Component {
         super(props);
         this.getBackgroundColor = this.getBackgroundColor.bind(this);
     }
+
     getZoneValue(idString) {
         if (this.props.data) {
             return this.props.data[idString][this.props.zoneValue];
@@ -450,13 +452,13 @@ class InteractiveBreakdown extends React.Component {
 
         if (this.state.data) {
             return (
-                <div className="row border">
+                <div className="row border custom-bg">
+                    <div className="col d-flex justify-content-center" style={cardStyle}>
+                        <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
+                    </div>
                     <div className="col d-flex flex-column align-items-center">
                         <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
-                    </div>
-                    <div className="col d-flex justify-content-center" style={cardStyle}>
-                        <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
                     </div>
                     <div className="col d-flex flex-column justify-content-center">
                         <BreakdownFilter />
@@ -476,6 +478,11 @@ class InteractiveBreakdown extends React.Component {
 ReactDOM.render(
     <InteractiveBreakdown />,
     document.getElementById('strikezone')
+);
+
+ReactDOM.render(
+    <PlayerSearch />,
+    document.getElementById('newsearch')
 );
 
 // ReactDOM.render(
