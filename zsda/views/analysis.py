@@ -5,7 +5,7 @@ import json
 def zone_analysis(pitch_data):
     data = pd.read_json(json.dumps(pitch_data), orient='records')
     if data.empty:
-        return no_data()
+        return None
     events = data['events'].unique().tolist()
     complete = {}
     tot_stats = {}

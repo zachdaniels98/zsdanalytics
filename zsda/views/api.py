@@ -24,7 +24,9 @@ def players(name):
     query = '''
             SELECT player_id, first_name, last_name 
             FROM player 
-            WHERE first_name LIKE '{}' {} last_name LIKE '{}' LIMIT 10;
+            WHERE (first_name LIKE '{}' {} last_name LIKE '{}')
+            AND position = 'P'
+            LIMIT 10;
             '''.format(fname, full, lname)
     cursor = get_db().cursor(dictionary=True)
     cursor.execute(query)

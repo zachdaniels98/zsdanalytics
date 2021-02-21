@@ -429,11 +429,13 @@ class InteractiveBreakdown extends React.Component {
             data: null,
             zoneSelect: 'Total',
             zoneValue: 'avg',
+            error: false
         };
 
         this.selectZone = this.selectZone.bind(this);
         this.resetBreakdown = this.resetBreakdown.bind(this);
         this.setZoneValue = this.setZoneValue.bind(this);
+        this.handleRefresh = this.handleRefresh.bind(this);
     }
 
     selectZone(zoneId) {
@@ -447,7 +449,11 @@ class InteractiveBreakdown extends React.Component {
         const api_url = `http://127.0.0.1:5000/baseball/api/player/${player_id}/zone-breakdown/0?${params.toString()}`;
         fetch(api_url)
             .then(response => response.json())
-            .then(data => this.setState({data: data}));
+            .then(data => this.setState({data: data}))
+            .catch(error => {
+                this.setState({error: true});
+                console.error('Error:', error);
+            });
     }
 
     resetBreakdown() {
@@ -458,9 +464,17 @@ class InteractiveBreakdown extends React.Component {
         this.setState({zoneValue: value});
     }
 
+    handleRefresh() {
+        window.location = window.location.pathname;
+    }
+
     render() {
         const cardStyle = {
             width: '24rem'
+        };
+
+        const zoneWidth = {
+            minWidth: '276px'
         };
 
         if (this.state.data) {
@@ -469,7 +483,7 @@ class InteractiveBreakdown extends React.Component {
                     <div className="col d-flex justify-content-center" style={cardStyle}>
                         <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
                     </div>
-                    <div className="col-3 d-flex flex-column align-items-center">
+                    <div className="col-3 d-flex flex-column align-items-center" style={zoneWidth}>
                         <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
                     </div>
@@ -477,6 +491,13 @@ class InteractiveBreakdown extends React.Component {
                         <BreakdownFilter />
                     </div>
                 </div>
+            )
+        } else if (this.state.error) {
+            return (
+                    <div className="text-center fs-1">
+                        <p>No Data</p>
+                        <button className="btn btn-primary" onClick={this.handleRefresh}>Reload?</button>
+                    </div>
             )
         } else {
             return (
