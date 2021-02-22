@@ -129,7 +129,11 @@ class Zone extends React.Component {
 
     getZoneValue(idString) {
         if (this.props.data) {
-            return this.props.data[idString][this.props.zoneValue];
+            let val = this.props.data[idString][this.props.zoneValue];
+            if (this.props.zoneValue != 'pitch_count') {
+                val = val.toFixed(3);
+            }
+            return val;
         } else {
             return '';
         }
@@ -237,7 +241,11 @@ class Breakdown extends React.Component {
 
     getBreakdownStats(field) {
         if (this.props.data) {
-            return this.props.data[this.props.zoneSelect][field];
+            let val = this.props.data[this.props.zoneSelect][field];
+            if (field == 'avg' || field == 'whiff') {
+                val = val.toFixed(3);
+            }
+            return val;
         }
         else {
             return '';
@@ -486,6 +494,9 @@ class InteractiveBreakdown extends React.Component {
                     <div className="col-3 d-flex flex-column align-items-center" style={zoneWidth}>
                         <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
+                        <div className="mb-2">
+                            <p className="text-muted text-center">To see specific stats, click on a zone</p>
+                        </div>
                     </div>
                     <div className="col d-flex flex-column justify-content-center">
                         <BreakdownFilter />
