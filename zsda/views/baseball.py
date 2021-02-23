@@ -38,4 +38,5 @@ def player(player_id):
         if player_name:
             player_id = get_player_id(player_name)['player_id']
             return redirect(url_for('baseball.player', player_id=player_id))
+    del stats['player_id']
     return render_template('baseball/player.html', info=info, stats=stats, adv_stats=adv_stats, fields=fields)

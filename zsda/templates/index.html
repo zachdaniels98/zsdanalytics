@@ -3,5 +3,39 @@
 {% block title %}ZSDA Home{% endblock %}
 
 {% block content %}
-<script src="{{ url_for('static', filename='dist/index.bundle.js') }}"></script>
+    <div class="container-fluid mt-3">
+        <div class="row row-cols-1 row-cols-md-2 g-3">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title text-center">About</h6>
+                        <p class="card-text">
+                            Hello! Welcome to zsdanalytics.com! This site is my personal project for practicing programming.
+                            The site itself is run using a Flask back-end connected to a front-end that utilizes JavaScript React
+                            for the interactive UI and designed using Bootstrap. The baseball portion of the site connects to a MySQL database
+                            that uses Python code to calculate statistics and analyze the data with the help of popular
+                            libraries such as Pandas, NumPy, and more.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h6 class="card-title text-center">Baseball</h6>
+                        <p class="card-text">
+                            Looking for more in-depth statistics than regular box scores? The baseball section
+                            of this site is aimed at providing zone-specific and situational analysis of players. 
+                            There is currently support for data from the 2019 regular season and statistics for pitchers.
+                            More features are planned - including batter support, player comparison, pitcher-batter matchups,
+                            and additional season support (with postseason data)!
+                        </p>
+                        <div class="card-body text-center">
+                            <a href="{{ url_for('baseball.home') }}" class="card-link btn btn-primary">Check it out!</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

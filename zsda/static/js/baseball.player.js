@@ -282,7 +282,7 @@ class Breakdown extends React.Component {
             <div className="col mt-5 d-flex flex-column align-items-center justify-content-center">
                 <div className="card text-center">
                     <div className="card-body">
-                        <h6 className="col card-title">Zone Breakdown - {this.props.zoneSelect}</h6>
+                        <h6 className="col card-title">Zone Breakdown* - {this.props.zoneSelect}</h6>
                         <table className="table">
                             <tbody>
                                 <tr>
@@ -293,7 +293,7 @@ class Breakdown extends React.Component {
                                     <th scope="row">Pitch Count</th>
                                     <td>{this.getBreakdownStats('pitch_count')}</td>
                                 </tr>
-                                <tr>
+                                <tr className="align-middle">
                                     <th scope="row">Pitch Type Distribution</th>
                                     <td>{this.getPitchDistribution()}</td>
                                 </tr>
@@ -495,7 +495,7 @@ class InteractiveBreakdown extends React.Component {
                         <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
                         <div className="mb-2">
-                            <p className="text-muted text-center">To see specific stats, click on a zone</p>
+                            <p className="text-muted text-center">To see specific stats*, click on a zone</p>
                         </div>
                     </div>
                     <div className="col d-flex flex-column justify-content-center">
@@ -512,7 +512,7 @@ class InteractiveBreakdown extends React.Component {
             )
         } else {
             return (
-                <div className="row">
+                <div className="row mt-2">
                     <div className="text-center fs-1">Loading...</div>
                 </div>
             )
@@ -522,7 +522,7 @@ class InteractiveBreakdown extends React.Component {
 
 ReactDOM.render(
     <InteractiveBreakdown />,
-    document.getElementById('strikezone')
+    document.getElementById('breakdown')
 );
 
 ReactDOM.render(

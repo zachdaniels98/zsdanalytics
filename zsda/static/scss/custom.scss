@@ -44,16 +44,6 @@ body {
     background-color: $cyan-100;
 }
 
-footer {
-    background-color: $cyan-800;
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    color: white;
-}
-
 .zone-row:after {
     clear: both;
     content: "";

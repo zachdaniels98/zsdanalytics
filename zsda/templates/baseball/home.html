@@ -3,28 +3,22 @@
 {% block title %}Baseball Home{% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-3">
-    <div class="card-group">
+<div class="container-fluid mt-5">
+    <div class="row">
+        <div id="search"></div>
+    </div>
+    <div class="row mt-5">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Player Search</h4>
-                <form class="row" method="POST">
-                    <div class="col">
-                        <input type="search" class="form-control" id="playerName" placeholder="Enter Player Name">
-                    </div>
-                    <div class="col">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body text-center">
-                <h6 class="card-title">Date Picker</h6>
-                <div id="calendar" class="d-flex justify-content-center mb-3"></div>
-                <p class="card-text">
-                    Have a specific game in mind? Select a date and then choose a game to go through pitch by pitch.
-                </p>
+                <h6 class="card-title">Planned Features</h6>
+                <ul>
+                    <li>Add filter for specific pitch types</li>
+                    <li>Player Overview support for batters</li>
+                    <li>Player Comparison</li>
+                    <li>Pitcher-Batter Matchups</li>
+                    <li>Postseason Statistics</li>
+                    <li>Additional Seasons</li>
+                </ul>
             </div>
         </div>
     </div>

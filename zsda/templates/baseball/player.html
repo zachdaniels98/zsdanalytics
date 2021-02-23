@@ -34,7 +34,11 @@
         </div>
     </div>
     <div class="row">
-        <div id="strikezone"></div>
+        <div id="breakdown"></div>
+    </div>
+    <div class="row text-muted lh-sm">
+        <p>Major League data provided by MLB Statcast</p>
+        <p>*Statistics are representative of available data</p>
     </div>
 </div>
 <script src="{{ url_for('static', filename='dist/baseball_player.bundle.js') }}"></script>
@@ -45,7 +49,4 @@
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
 </script>
-<!-- <footer class="footer d-flex justify-content-center align-items-center">
-    <p>Zach Daniels zsdanalytics.com</p>
-</footer> -->
 {% endblock %}

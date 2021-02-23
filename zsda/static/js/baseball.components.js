@@ -24,7 +24,7 @@ class Suggestions extends React.Component {
         }
         if (matches.length > 0) {
             return (
-            <ul className="list-group dropdown-menu">{matches}</ul>
+            <ul className="list-group dropdown-menu w-100">{matches}</ul>
             );
         } else {
             return '';
