@@ -3,97 +3,6 @@ import ReactDOM from 'react-dom';
 import PlayerSearch from './baseball.components';
 import '../scss/custom.scss';
 
-class PlayerInfo extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: []
-        };
-    }
-
-    // getAPI() {
-    //     const api_url = 'http://127.0.0.1:5000/baseball/api/player/477132';
-    //     var num = 0;
-    //     var kershaw;
-    //     fetch(api_url)
-    //         .then(response => response.json())
-    //         .then(data => this.setState({data: data}));
-    // }
-
-    componentDidMount() {
-        const api_url = 'http://127.0.0.1:5000/baseball/api/player/477132';
-        fetch(api_url)
-            .then(response => response.json())
-            .then(data => this.setState({data: data}));
-    }
-
-    render() {
-        return (
-            <div className="card text-center">
-                <div className="card-body">
-                    <h4 className="card-title">{this.state.data.first_name + " " + this.state.data.last_name}</h4>
-                    <div className="btn-group" role="group" aria-label="pitch type checkbox toggle button group">
-                        <input type="checkbox" className="btn-check" id="btncheck1" autoComplete="off"></input>
-                        <label className="btn btn-outline-primary" htmlFor="btncheck1">4-Seam Fastball</label>
-                        <input type="checkbox" className="btn-check" id="btncheck2" autoComplete="off"></input>
-                        <label className="btn btn-outline-primary" htmlFor="btncheck2">Slider</label>
-                        <input type="checkbox" className="btn-check" id="btncheck3" autoComplete="off"></input>
-                        <label className="btn btn-outline-primary" htmlFor="btncheck3">Curve</label>
-                        <input type="checkbox" className="btn-check" id="btncheck4" autoComplete="off"></input>
-                        <label className="btn btn-outline-primary" htmlFor="btncheck4">Changeup</label>
-                    </div>
-                    <div className="row">
-                        <div className="col">
-                            <table className="table">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">W-L</th>
-                                        <td>8-4</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">ERA</th>
-                                        <td>2.45</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">G</th>
-                                        <td>21</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">GS</th>
-                                        <td>21</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div className="col">
-                            <table className="table">
-                                <tbody>
-                                    <tr>
-                                        <th scope="row">IP</th>
-                                        <td>86.2</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">H</th>
-                                        <td>124</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">R</th>
-                                        <td>32</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">ER</th>
-                                        <td>27</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
-
 class ZoneSquare extends React.Component {
     constructor(props) {
         super(props);
@@ -529,8 +438,3 @@ ReactDOM.render(
     <PlayerSearch class="mb-3"/>,
     document.getElementById('newsearch')
 );
-
-// ReactDOM.render(
-//     <PlayerInfo />,
-//     document.getElementById('player-info')
-// )

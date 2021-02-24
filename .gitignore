@@ -9,3 +9,4 @@ zsda/static/node_modules/
 zsda/static/dist/
 zsda/db.py
 zsda/static/favicon.ico
+zsda/static/stats.json
