@@ -1,5 +1,14 @@
+/**
+ * Contains code for reuasble components
+ * Currently only used for Player Search bar
+ */
+
 import React from 'react';
 
+/**
+ * Dropdown that shows suggested searches for players based on input value
+ * TODO add in support for arrow up/down keypresses to traverse the list
+ */
 class Suggestions extends React.Component {
     constructor(props) {
         super(props);
@@ -7,10 +16,18 @@ class Suggestions extends React.Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
+    /**
+     * If a dropdown suggestion is clicked, search using that suggestions value
+     * @param {Event} e 
+     */
     handleClick(e) {
         this.props.autoComplete(e);
     }
 
+    /**
+     * Creates a dropdown of buttons each containing a suggested player name
+     * @returns {JSX}
+     */
     getMatches() {
         let matches = [];
         for (let key in this.props.data) {
@@ -38,6 +55,10 @@ class Suggestions extends React.Component {
     }
 }
 
+/**
+ * Component containing input form with dropdown suggestions
+ * Connects to the player list API to get partial matches for suggestions
+ */
 class PlayerSearch extends React.Component {
     constructor(props) {
         super(props);
@@ -48,14 +69,23 @@ class PlayerSearch extends React.Component {
         this.fetchData = this.fetchData.bind(this);
     }
 
+    /**
+     * Sets new value as characters are typed in
+     */
     handleChange(e) {
         this.setState({value: e.target.value});
     }
 
+    /**
+     * Sets new value and sets autocomplete to true, which is handled in ComponentDidUpdate
+     */
     autoComplete(e) {
         this.setState({value: e.target.value, autocomplete: true});
     }
 
+    /**
+     * Check to see if there is a match and if so set autocomplete to true, otherwise alert user
+     */
     handleSubmit(e) {
         if (Object.keys(this.state.data).length != 1 && !this.state.autocomplete) {
             alert('Please enter valid name');
@@ -65,6 +95,9 @@ class PlayerSearch extends React.Component {
         }
     }
 
+    /**
+     * Fetch the data from the players API using the inputted value
+     */
     fetchData() {
         const api_url = 'http://127.0.0.1:5000/baseball/api/players/' + this.state.value;
         fetch(api_url)
@@ -72,6 +105,10 @@ class PlayerSearch extends React.Component {
             .then(data => this.setState({data: data}));
     }
 
+    /**
+     * If autocomplete, submit form using input value
+     * Otherwise, if 2 or more characters have been inputted fetch data, otherwise set data to empty
+     */
     componentDidUpdate(_prevProps, prevState) {
         if (this.state.autocomplete) {
             let playerForm = document.getElementById("player-search");

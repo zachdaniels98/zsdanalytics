@@ -1,3 +1,7 @@
+"""Init file to create the Flask web app.
+
+Registers blueprints for app and sets up db file that contains the connection to the MySQL database"""
+
 import os
 
 from flask import Flask

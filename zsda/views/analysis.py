@@ -1,8 +1,15 @@
+"""Contains calculations on baseball data
+
+Takes in data from MySQL database and returns it as dictionary
+The data is returned by the API in JSON format to be fetched by front end code."""
+
 import pandas as pd
 import numpy as np
 import json
 
 def zone_analysis(pitch_data):
+    """Take in the pitch level data and return calculated stats for each of the 14 zones and the stats for the entire zone"""
+
     data = pd.read_json(json.dumps(pitch_data), orient='records')
     if data.empty:
         return None
@@ -27,6 +34,8 @@ def zone_analysis(pitch_data):
     return complete
 
 def get_pitch_type_count(data):
+    """Return counts of each type of pitch (Fastball, Changeup, etc.)"""
+
     pitch_types = data['pitch_type'].unique().tolist()
     counts = {}
     for p in pitch_types:
@@ -34,6 +43,8 @@ def get_pitch_type_count(data):
     return counts
 
 def get_avg(data):
+    """Return batting average for given data"""
+
     outs = ['double_play', 'field_error', 'field_out', 'fielders_choice', 'fielders_choice_out', 'force_out',
        'grounded_into_double_play','strikeout']
     hits = ['single', 'double', 'triple', 'home_run']
@@ -50,6 +61,8 @@ def get_avg(data):
     return round(avg, 3)
 
 def get_whiff(data):
+    """Return whiff percentage for given data"""
+    
     miss = ['missed_blunt', 'swinging_strike', 'swinging_strike_blocked']
     swing_data = data[data['result'].isin(['X', 'S'])]
     miss_data = data[data['description'].isin(miss)]
@@ -59,21 +72,3 @@ def get_whiff(data):
     else:
         whiff = len(miss_data.index) / len(swing_data.index)
     return round(whiff, 3)
-
-def no_data():
-    complete = {}
-    tot_stats = {}
-    tot_stats['pitch_count'] = 0
-    tot_stats['pitch_type_count'] = 0
-    tot_stats['avg'] = 0
-    tot_stats['whiff'] = 0
-    complete['total'] = tot_stats
-    zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
-    for zone in zones:
-        zone_stats = {}
-        zone_stats['pitch_count'] = 0
-        zone_stats['pitch_type_count'] = 0
-        zone_stats['avg'] = 0
-        zone_stats['whiff'] = 0
-        complete[zone] = zone_stats
-    return complete

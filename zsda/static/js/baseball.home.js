@@ -1,3 +1,7 @@
+/**
+ * Renders Player Search on Baseball Homepage
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PlayerSearch from './baseball.components';

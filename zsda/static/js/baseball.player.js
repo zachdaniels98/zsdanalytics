@@ -1,14 +1,26 @@
+/**
+This file contains React Components that are rendered on the Player Overview Page
+It contains an information stat overview, an interactive 14 zone strikezone, and a form to filter the pitch level data
+*/
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PlayerSearch from './baseball.components';
 import '../scss/custom.scss';
 
+/**
+ * Component for each section of the strikezone
+ */
 class ZoneSquare extends React.Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
     }
 
+    /**
+     * Selects zone statistics to be showcased in the Breakdown component
+     * TODO Cleanup function call so there is no need to send prop function a prop value
+     */
     handleClick() {
         this.props.onZoneSelect(this.props.zoneId);
     }
@@ -16,9 +28,12 @@ class ZoneSquare extends React.Component {
     render() {
         let interior;
 
+        // Set color style 
         const colorStyle = this.props.background(this.props.value);
 
+        // Check if this zone is going to be an edge, and set interior
         if (this.props.isEdge) {
+            // For edges, interior needs to be unskewed so value is not disoriented along with edge shape. Check custom.scss for unskew and edge styles
             interior = <div className="unskew m-1 position-absolute top-0 start-0" onClick={this.handleClick}>{this.props.value}</div>;
         } else {
             interior = this.props.value;
@@ -30,12 +45,20 @@ class ZoneSquare extends React.Component {
     }
 }
 
+/**
+ * Creates 14 zone strikezone interactive component
+ */
 class Zone extends React.Component {
     constructor(props) {
         super(props);
         this.getBackgroundColor = this.getBackgroundColor.bind(this);
     }
 
+    /**
+     * Function that returns value for the corresponding zone
+     * @param {String} idString
+     * @returns {Float or Int} value to be displayed in the zone 
+     */
     getZoneValue(idString) {
         if (this.props.data) {
             let val = this.props.data[idString][this.props.zoneValue];
@@ -48,6 +71,12 @@ class Zone extends React.Component {
         }
     }
 
+    /**
+     * Calculates background color for zone on gradient between red and blue with max opacity of 0.7
+     * Uses current zone range to translate val into relative position between color gradient of -0.7 and 0.7
+     * @param {Float} val Value of the zone
+     * @returns {Object} Style of the background for the zone
+     */
     getBackgroundColor(val) {
         let dataCopy = Object.assign({}, this.props.data);
         delete dataCopy['Total'];
@@ -67,6 +96,10 @@ class Zone extends React.Component {
         }
     }
 
+    /**
+     * Render the 9 zones that constitute the locations where a pitch would be called a strike
+     * @returns {JSX} 3 rows of 3 ZoneSquares
+     */
     renderInnerZone() {
         let zone = [];
         for (let i = 0; i < 3; i++) {
@@ -86,6 +119,10 @@ class Zone extends React.Component {
         return zone;
     }
 
+    /**
+     * Render the 4 outer zone edges where pitches would be called a ball
+     * @returns {JSX} 4 ZoneSquares where isEdge = true
+     */
     renderOuterZone() {
         let corners = {
             11: 'zone-eleven',
@@ -118,6 +155,10 @@ class Zone extends React.Component {
     }
 }
 
+/**
+ * Dropdown that allows users to select what value is shown in each zone
+ * Value options: Batting Average, Pitch Count, Whiff Percentage
+ */
 class ZoneValueSelect extends React.Component {
     constructor(props) {
         super(props);
@@ -141,6 +182,10 @@ class ZoneValueSelect extends React.Component {
     }
 }
 
+/**
+ * Simple visual showing total or selected zone values for the player
+ * Contains info on Batting Average, Pitch Count, Pitch Count by Pitch Type, and Whiff Percentage
+ */
 class Breakdown extends React.Component {
     constructor(props) {
         super(props);
@@ -148,6 +193,11 @@ class Breakdown extends React.Component {
         this.getPitchDistribution = this.getPitchDistribution.bind(this);
     }
 
+    /**
+     * Gets the overview stat based on the given field
+     * @param {String} field Designates what value to retrieve
+     * @returns {Float} stat value
+     */
     getBreakdownStats(field) {
         if (this.props.data) {
             let val = this.props.data[this.props.zoneSelect][field];
@@ -161,6 +211,9 @@ class Breakdown extends React.Component {
         }
     }
 
+    /**
+     * Returns the counts for each pitch type
+     */
     getPitchDistribution() {
         if (this.props.data) {
             const distribution = this.props.data[this.props.zoneSelect]['pitch_type_count'];
@@ -220,6 +273,9 @@ class Breakdown extends React.Component {
     }
 }
 
+/**
+ * Form to filter the pitch data into specific situations
+ */
 class BreakdownFilter extends React.Component {
     constructor(props) {
         super(props);
@@ -227,10 +283,16 @@ class BreakdownFilter extends React.Component {
         this.handleCount = this.handleCount.bind(this);
     }
 
+    /**
+     * Keep track of whether count should be included in the filter
+     */
     handleCount() {
         this.setState(prevState => ({count: !prevState.count}));
     }
 
+    /**
+     * Checks to see if the count was used in the filter and sets state if yes
+     */
     componentDidMount() {
         let paramCount = new URLSearchParams(window.location.search).get('balls');
         if (paramCount) {
@@ -339,6 +401,9 @@ class BreakdownFilter extends React.Component {
     }
 }
 
+/**
+ * Component that contains the Zone, ZoneValueSelect, Breakdown, and BreakdownFilter components
+ */
 class InteractiveBreakdown extends React.Component {
     constructor(props) {
         super(props);
@@ -355,10 +420,17 @@ class InteractiveBreakdown extends React.Component {
         this.handleRefresh = this.handleRefresh.bind(this);
     }
 
+    /**
+     * Sets the selected zone
+     * @param {Int} zoneId Selected Zone; If no zone is selected, value is Total (can also be set to total by resetting breakdown)
+     */
     selectZone(zoneId) {
         this.setState({zoneSelect: zoneId});
     }
 
+    /**
+     * On mount fetch data from API to be displayed in the breakdown
+     */
     componentDidMount() {
         const path = window.location.pathname;
         const player_id = path.substring(17);
@@ -373,23 +445,35 @@ class InteractiveBreakdown extends React.Component {
             });
     }
 
+    /**
+     * Set Breakdown to contain stats for the entire zone
+     */
     resetBreakdown() {
         this.setState({zoneSelect: 'Total'});
     }
 
+    /**
+     * Sets the zone value to new selection
+     * @param {String} value new zone value 'avg', 'pitch_count', 'whiff'
+     */
     setZoneValue(value) {
         this.setState({zoneValue: value});
     }
 
+    /**
+     * Reloads the page when Filter Search returns no data for the player
+     */
     handleRefresh() {
         window.location = window.location.pathname;
     }
 
     render() {
+        // Give bootstrap card column a set width so col doesn't resize on changing data within breakdown component
         const cardStyle = {
             width: '24rem'
         };
 
+        // Set strikezone column to a default with so zone does not overlap other components on window resizing
         const zoneWidth = {
             minWidth: '276px'
         };
@@ -412,7 +496,7 @@ class InteractiveBreakdown extends React.Component {
                     </div>
                 </div>
             )
-        } else if (this.state.error) {
+        } else if (this.state.error) { // If no data is returned by the filter
             return (
                     <div className="text-center fs-1">
                         <p>No Data</p>

@@ -1,9 +1,9 @@
-# File for global variables
+"""Contains fields variable that stores information for Bootstrap tooltips"""
 
 fields = {
     "year": {
         "abbr": "Year",
-        "tooltip": "year"
+        "tooltip": "Year"
     },
     "player_id": {
         "abbr": "PID",
