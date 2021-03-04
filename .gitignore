@@ -10,3 +10,9 @@ zsda/static/dist/
 zsda/db.py
 zsda/static/favicon.ico
 zsda/static/stats.json
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+application.py

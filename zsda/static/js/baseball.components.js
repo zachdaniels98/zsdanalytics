@@ -99,7 +99,7 @@ class PlayerSearch extends React.Component {
      * Fetch the data from the players API using the inputted value
      */
     fetchData() {
-        const api_url = 'http://127.0.0.1:5000/baseball/api/players/' + this.state.value;
+        const api_url = '/baseball/api/players/' + this.state.value;
         fetch(api_url)
             .then(response => response.json())
             .then(data => this.setState({data: data}));

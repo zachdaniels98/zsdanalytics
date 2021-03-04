@@ -1,2 +1,8 @@
+*.py[cod]
+
 venv/
 .vscode/
+
+zsda/__pycache__/
+zsda/static/node_modules/
+zsda/static/stats.json

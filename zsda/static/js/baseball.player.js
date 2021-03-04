@@ -435,7 +435,8 @@ class InteractiveBreakdown extends React.Component {
         const path = window.location.pathname;
         const player_id = path.substring(17);
         const params = new URLSearchParams(window.location.search);
-        const api_url = `http://127.0.0.1:5000/baseball/api/player/${player_id}/zone-breakdown/0?${params.toString()}`;
+        const host = window.location.origin;
+        const api_url = `${host}/baseball/api/player/${player_id}/zone-breakdown/0?${params.toString()}`;
         fetch(api_url)
             .then(response => response.json())
             .then(data => this.setState({data: data}))
