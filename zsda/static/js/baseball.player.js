@@ -6,6 +6,7 @@ It contains an information stat overview, an interactive 14 zone strikezone, and
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PlayerSearch from './baseball.components';
+import { Tooltip } from 'bootstrap';
 import '../scss/custom.scss';
 
 /**
@@ -478,6 +479,11 @@ class InteractiveBreakdown extends React.Component {
         const zoneWidth = {
             minWidth: '276px'
         };
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new Tooltip(tooltipTriggerEl)
+        })
 
         if (this.state.data) {
             return (
