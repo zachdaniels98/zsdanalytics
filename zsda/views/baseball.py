@@ -29,7 +29,7 @@ def home():
             return redirect(url_for('baseball.player', player_id=player_id))
     return render_template('baseball/home.html')
 
-@bp.route('/player/<int:player_id>', methods=['GET'])
+@bp.route('/players/<int:player_id>', methods=['GET'])
 def player(player_id):
     """Returns HTML template for player overview page.
 
