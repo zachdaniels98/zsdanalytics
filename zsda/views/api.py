@@ -31,7 +31,7 @@ def players(name):
             SELECT player_id, first_name, last_name 
             FROM player 
             WHERE (first_name LIKE '{}' {} last_name LIKE '{}')
-            AND position = 'P'
+            # AND position = 'P'
             LIMIT 10;
             '''.format(fname, full, lname)
     cursor = get_db().cursor(dictionary=True)
@@ -141,7 +141,7 @@ def zone_breakdown(player_id, position):
     cursor.execute(query)
     stats = cursor.fetchall()
     cursor.close()
-    return zone_analysis(stats)
+    return zone_analysis(stats, position)
 
 @bp.route('/team/<string:team_id>', methods=['GET'])
 def team(team_id):

@@ -408,6 +408,7 @@ class InteractiveBreakdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            player_info: null,
             data: null,
             zoneSelect: 'Total',
             zoneValue: 'avg',
@@ -429,21 +430,41 @@ class InteractiveBreakdown extends React.Component {
     }
 
     /**
-     * On mount fetch data from API to be displayed in the breakdown
+     * On mount fetch player data to find out whether it is pitcher or position data to be fetched
      */
     componentDidMount() {
         const path = window.location.pathname;
         const player_id = path.substring(17);
-        const params = new URLSearchParams(window.location.search);
         const host = window.location.origin;
-        const api_url = `${host}/baseball/api/player/${player_id}/zone-breakdown/0?${params.toString()}`;
+        const api_url = `${host}/baseball/api/player/${player_id}`;
         fetch(api_url)
             .then(response => response.json())
-            .then(data => this.setState({data: data}))
+            .then(data => this.setState({player_info: data}))
             .catch(error => {
                 this.setState({error: true});
                 console.error('Error:', error);
             });
+    }
+
+    /**
+     * On update fetch data from API to be displayed in the breakdown
+     */
+    componentDidUpdate(_prevProps, prevState) {
+        if (this.state.player_info !== prevState.player_info) {
+            const path = window.location.pathname;
+            const player_id = path.substring(17);
+            const params = new URLSearchParams(window.location.search);
+            const host = window.location.origin;
+            let stat_type = this.state.player_info['position'] == 'P' ? 0 : 1;
+            const api_url = `${host}/baseball/api/player/${player_id}/zone-breakdown/${stat_type}?${params.toString()}`;
+            fetch(api_url)
+                .then(response => response.json())
+                .then(data => this.setState({data: data}))
+                .catch(error => {
+                    this.setState({error: true});
+                    console.error('Error:', error);
+                });
+        }
     }
 
     /**

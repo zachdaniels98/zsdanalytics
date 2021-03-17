@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import json
 
-def zone_analysis(pitch_data):
+def zone_analysis(pitch_data, position):
     """Take in the pitch level data and return calculated stats for each of the 14 zones and the stats for the entire zone"""
 
     data = pd.read_json(json.dumps(pitch_data), orient='records')

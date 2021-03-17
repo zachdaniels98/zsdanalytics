@@ -168,5 +168,85 @@ fields = {
     "fip_": {
         "abbr": "FIP-",
         "tooltip": "Adjusted FIP"
+    },
+    "plate_apps": {
+        "abbr": "PA",
+        "tooltip": "Plate Appearances"
+    },
+    "at_bats": {
+        "abbr": "AB",
+        "tooltip": "At Bats"
+    },
+    "singles": {
+        "abbr": "1B",
+        "tooltip": "Singles"
+    },
+    "doubles": {
+        "abbr": "2B",
+        "tooltip": "Doubles"
+    },
+    "triples": {
+        "abbr": "3B",
+        "tooltip": "Triples"
+    },
+    "runs_batted_in": {
+        "abbr": "RBI",
+        "tooltip": "Runs Batted In"
+    },
+    "sac_fly": {
+        "abbr": "SF",
+        "tooltip": "Sacrifice Fly"
+    },
+    "sac_hit": {
+        "abbr": "SH",
+        "tooltip": "Sacrifice Hit"
+    },
+    "ground_dp": {
+        "abbr": "GDP",
+        "tooltip": "Ground into Double Play"
+    },
+    "stolen_bases": {
+        "abbr": "SB",
+        "tooltip": "Stolen Bases"
+    },
+    "caught_stealing": {
+        "abbr": "CS",
+        "tooltip": "Caught Stealing"
+    },
+    "bb_k": {
+        "abbr": "BB/K",
+        "tooltip": "Walks to Strikeouts ratio"
+    },
+    "obp": {
+        "abbr": "OBP",
+        "tooltip": "On-Base Percentage"
+    },
+    "slg": {
+        "abbr": "SLG",
+        "tooltip": "Slugging Percentage"
+    },
+    "ops": {
+        "abbr": "OPS",
+        "tooltip": "On-Base plus Slugging Percentage"
+    },
+    "iso": {
+        "abbr": "ISO",
+        "tooltip": "Isolated Power"
+    },
+    "wrc": {
+        "abbr": "wRC",
+        "tooltip": "Weighted Runs Created"
+    },
+    "wraa": {
+        "abbr": "wRAA",
+        "tooltip": "Weighted Runs Above Average"
+    },
+    "woba": {
+        "abbr": "wOBA",
+        "tooltip": "Weighted On-Base Average"
+    },
+    "wrc_plus": {
+        "abbr": "wRC+",
+        "tooltip": "Weighted Runs Created Plus"
     }
 }
