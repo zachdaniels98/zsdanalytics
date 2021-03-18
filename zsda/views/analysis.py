@@ -7,31 +7,13 @@ import pandas as pd
 import numpy as np
 import json
 
-def zone_analysis(pitch_data, position):
-    """Take in the pitch level data and return calculated stats for each of the 14 zones and the stats for the entire zone"""
+outs = ['double_play', 'field_error', 'field_out', 'fielders_choice', 'fielders_choice_out', 'force_out',
+       'grounded_into_double_play','strikeout']
+hits = ['single', 'double', 'triple', 'home_run']
 
-    data = pd.read_json(json.dumps(pitch_data), orient='records')
-    if data.empty:
-        return None
-    events = data['events'].unique().tolist()
-    complete = {}
-    tot_stats = {}
-    tot_stats['pitch_count'] = len(data.index)
-    tot_stats['pitch_type_count'] = get_pitch_type_count(data)
-    tot_stats['avg'] = get_avg(data)
-    tot_stats['whiff'] = get_whiff(data)
-    complete['Total'] = tot_stats
-    zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
-    for zone in zones:
-        zone_data = data[data['zone'] == zone]
-        zone_stats = {}
-        zone_stats['pitch_count'] = len(zone_data.index)
-        zone_stats['pitch_type_count'] = get_pitch_type_count(zone_data)
-        zone_stats['avg'] = get_avg(zone_data)
-        zone_stats['whiff'] = get_whiff(zone_data)
-        complete[zone] = zone_stats
+outcomes = hits + ['strikeout', 'walk']
 
-    return complete
+at_bats = outs + hits
 
 def get_pitch_type_count(data):
     """Return counts of each type of pitch (Fastball, Changeup, etc.)"""
@@ -45,11 +27,6 @@ def get_pitch_type_count(data):
 def get_avg(data):
     """Return batting average for given data"""
 
-    outs = ['double_play', 'field_error', 'field_out', 'fielders_choice', 'fielders_choice_out', 'force_out',
-       'grounded_into_double_play','strikeout']
-    hits = ['single', 'double', 'triple', 'home_run']
-    
-    at_bats = outs + hits
     ab_data = data[data['events'].isin(at_bats)]
     hit_data = data[data['events'].isin(hits)]
 
@@ -72,3 +49,90 @@ def get_whiff(data):
     else:
         whiff = len(miss_data.index) / len(swing_data.index)
     return round(whiff, 3)
+
+def get_abs(data):
+    """Return number of at bats"""
+
+    ab_data = data[data['events'].isin(at_bats)]
+
+    return len(ab_data.index)
+
+def get_hits(data):
+    """Return number of hits"""
+
+    hit_data = data[data['events'].isin(hits)]
+    return len(hit_data.index)
+
+def get_ab_outcome(data, outcome):
+    """Return number of instances of given outcome
+    - strikeouts
+    - walks
+    - singles
+    - doubles
+    - triples
+    - home runs"""
+
+    outcome_data = data[data['events'].isin([outcome])]
+
+    return len(outcome_data.index)
+
+"""
+FULL ANALYSIS
+Different functions for pitchers and batters
+"""
+pitcher_functions = {
+    'pitch_type_count': get_pitch_type_count,
+    'avg': get_avg,
+    'whiff': get_whiff,
+    'strikeout': get_ab_outcome
+}
+
+batter_functions = {
+    'avg': get_avg,
+    'at_bats': get_abs,
+    'hits': get_hits,
+    'whiff': get_whiff,
+    'strikeout': get_ab_outcome,
+    'walk': get_ab_outcome,
+    'single': get_ab_outcome,
+    'double': get_ab_outcome,
+    'triple': get_ab_outcome,
+    'home_run': get_ab_outcome,
+}
+
+def zone_analysis(pitch_data, position):
+    """Take in the pitch level data and return calculated stats for each of the 14 zones and the stats for the entire zone"""
+
+    data = pd.read_json(json.dumps(pitch_data), orient='records')
+    if data.empty:
+        return None
+    events = data['events'].unique().tolist()
+    complete = {}
+    tot_stats = {}
+    if position == 0:
+        functions = pitcher_functions
+        tot_stats['pitch_count'] = len(data.index)
+    else:
+        functions = batter_functions
+
+    for f in functions:
+        if f in outcomes:
+            tot_stats[f] = functions[f](data, f)
+        else:
+            tot_stats[f] = functions[f](data)
+    complete['Total'] = tot_stats
+
+    zones = [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12, 13, 14]
+    for zone in zones:
+        zone_data = data[data['zone'] == zone]
+        zone_stats = {}
+        if position == 0:
+            zone_stats['pitch_count'] = len(zone_data.index)
+        for f in functions:
+            if f in outcomes:
+                zone_stats[f] = functions[f](zone_data, f)
+            else:
+                zone_stats[f] = functions[f](zone_data)
+        complete[zone] = zone_stats
+
+    return complete
