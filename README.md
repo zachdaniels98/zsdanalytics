@@ -5,7 +5,7 @@ A personal project I started earlier this year, ZSD Analytics is my way of learn
 
 #### Features planned to be added:
 * Add filter for specific pitch types
-* Player Overview support for batters
+* Player Overview support for batters - Completed
 * Player Comparison
 * Pitcher-Batter Matchups
 * Postseason Statistics
