@@ -11,4 +11,4 @@ A personal project I started earlier this year, ZSD Analytics is my way of learn
 * Postseason Statistics
 * Support for Additional Seasons (Currently only 2019 Regular Season data is supported)
 
-I plan to do plenty of code refactoring as I implement features, as much of the site is being developed alongside learning the languages and practices. I hope to deploy an initial version of the site soon.
+I plan to do plenty of code refactoring as I implement features, as much of the site is being developed alongside learning the languages and practices.

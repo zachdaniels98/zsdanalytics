@@ -601,14 +601,15 @@ class InteractiveBreakdown extends React.Component {
         if (this.state.data) {
             return (
                 <div className="row border mt-2">
-                    <div className="col d-flex justify-content-center" style={cardStyle}>
+                    <div className="col d-flex justify-content-center pb-4" style={cardStyle}>
                         <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} playerInfo={this.state.playerInfo}/>
                     </div>
                     <div className="col-3 d-flex flex-column align-items-center" style={zoneWidth}>
                         <ZoneValueSelect onZoneValueChange={this.setZoneValue} playerType={this.state.playerInfo['position']}/>
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
-                        <div className="mb-2">
-                            <p className="text-muted text-center">To see specific stats*, click on a zone</p>
+                        <div>
+                            <p className="fw-bold text-center mb-0">Zone is from catcher's perspective</p>
+                            <p className="text-center">To see specific stats*, click on a zone</p>
                         </div>
                     </div>
                     <div className="col d-flex flex-column justify-content-center">
