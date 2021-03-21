@@ -110,7 +110,7 @@ def zone_breakdown(player_id, position):
         val = args.get(arg)
         if val == '':
             continue
-        elif col == 'stand':
+        elif col == 'stand' or col == 'p_throws':
             conditions += f'\nAND {col} = \'{val}\''
             continue
         elif col == 'outs':

@@ -62,7 +62,8 @@ class Zone extends React.Component {
     getZoneValue(idString) {
         if (this.props.data) {
             let val = this.props.data[idString][this.props.zoneValue];
-            if (this.props.zoneValue != 'pitch_count') {
+            const rounders = ['avg', 'whiff']
+            if (rounders.includes(this.props.zoneValue)) {
                 val = val.toFixed(3);
             }
             return val;
@@ -163,10 +164,39 @@ class ZoneValueSelect extends React.Component {
     constructor(props) {
         super(props);
         this.handleChange = this.handleChange.bind(this);
+        this.getOptions = this.getOptions.bind(this);
     }
     
     handleChange(e) {
         this.props.onZoneValueChange(e.target.value);
+    }
+
+    getOptions() {
+        let opts = {};
+        let optList = [];
+        if (this.props.playerType == 'P') {
+            opts = {
+                'avg': 'Batting Avg',
+                'whiff': 'Whiff %',
+                'strikeout': 'Strikeouts',
+                'pitch_count': 'Pitch Count'
+            };
+        } else {
+            opts = {
+                'avg': 'Batting Avg',
+                'whiff': 'Whiff %',
+                'hits': 'Hits',
+                'strikeout': 'Strikeouts',
+                'single': 'Singles',
+                'double': 'Doubles',
+                'triple': 'Triples',
+                'home_run': 'Home Runs'
+            };
+        }
+        for (const opt in opts) {
+            optList.push(<option value={opt} key={opt}>{opts[opt]}</option>);
+        }
+        return optList;
     }
 
     render() {
@@ -174,12 +204,49 @@ class ZoneValueSelect extends React.Component {
 
         return (
             <select className="form-control form-select mt-4" style={selectWidth} aria-label="Zone value select" onChange={this.handleChange}>
-                <option value='avg'>Batting Avg</option>
+                {/* <option value='avg'>Batting Avg</option>
                 <option value='pitch_count'>Pitch Count</option>
-                <option value='whiff'>Whiff %</option>
+                <option value='whiff'>Whiff %</option> */}
+                {this.getOptions()}
             </select>
         )
     }
+}
+
+function PitcherBreakdown(props) {
+    return (
+        <React.Fragment>
+            <tr>
+                <th scope="row">AVG</th>
+                <td>{props.getBreakdownStats('avg')}</td>
+            </tr>
+            <tr>
+                <th scope="row">Pitch Count</th>
+                <td>{props.getBreakdownStats('pitch_count')}</td>
+            </tr>
+            <tr className="align-middle">
+                <th scope="row">Pitch Type Distribution</th>
+                <td>{props.getPitchDistribution()}</td>
+            </tr>
+            <tr>
+                <th scope="row">Whiff %</th>
+                <td>{props.getBreakdownStats('whiff')}</td>
+            </tr>
+        </React.Fragment>
+    );
+}
+
+function BatterBreakdown(props) {
+    return (
+        <React.Fragment>
+            <tr className="align-middle">
+                <td>{props.getBatStats(0)}</td>
+            </tr>
+            <tr className="align-middle">
+                <td>{props.getBatStats(1)}</td>
+            </tr>
+        </React.Fragment>
+    );
 }
 
 /**
@@ -191,6 +258,8 @@ class Breakdown extends React.Component {
         super(props);
 
         this.getPitchDistribution = this.getPitchDistribution.bind(this);
+        this.getBatStats = this.getBatStats.bind(this);
+        this.getBreakdownStats = this.getBreakdownStats.bind(this);
     }
 
     /**
@@ -238,31 +307,55 @@ class Breakdown extends React.Component {
             return '';
         }
     }
+    
+    getBatStats(row) {
+        let stats = {};
+        if (row == 0) {
+            stats = {'AVG': 'avg', 'H': 'hits', 'SO': 'strikeout', 'BB': 'walk'};
+        } else {
+            stats = {'1B': 'single', '2B': 'double', '3B': 'triple', 'HR': 'home_run'};
+        }
+        let statHeads = [];
+        let statVals = [];
+        for (const s in stats) {
+            statHeads.push(<th scope="col" key={s}>{s}</th>);
+            statVals.push(<td key={s}>{this.getBreakdownStats(stats[s])}</td>);
+        }
+        return (
+            <table className="table">
+                <thead>
+                    <tr>{statHeads}</tr>
+                </thead>
+                <tbody>
+                    <tr>{statVals}</tr>
+                </tbody>
+            </table>
+        )
+    }
 
     render() {
+        const statType = this.props.playerInfo['position'];
+        let breakdown = null;
+        let border = "table";
+        if (statType == 'P') {
+            breakdown = <PitcherBreakdown getBreakdownStats={this.getBreakdownStats} getPitchDistribution={this.getPitchDistribution}/>;
+        } else {
+            breakdown = <BatterBreakdown getBatStats={this.getBatStats} />;
+            border += " table-borderless";
+        }
+
+        const cardWidth = {
+            minWidth: '20rem'
+        };
+
         return (
             <div className="col mt-5 d-flex flex-column align-items-center justify-content-center">
-                <div className="card text-center">
+                <div className="card text-center" style={cardWidth}>
                     <div className="card-body">
                         <h6 className="col card-title">Zone Breakdown* - {this.props.zoneSelect}</h6>
-                        <table className="table">
+                        <table className={border}>
                             <tbody>
-                                <tr>
-                                    <th scope="row">AVG</th>
-                                    <td>{this.getBreakdownStats('avg')}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Pitch Count</th>
-                                    <td>{this.getBreakdownStats('pitch_count')}</td>
-                                </tr>
-                                <tr className="align-middle">
-                                    <th scope="row">Pitch Type Distribution</th>
-                                    <td>{this.getPitchDistribution()}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Whiff %</th>
-                                    <td>{this.getBreakdownStats('whiff')}</td>
-                                </tr>
+                                {breakdown}
                             </tbody>
                         </table>
                         <button type="reset" className="btn btn-primary" onClick={this.props.reset}>Reset</button>
@@ -302,14 +395,17 @@ class BreakdownFilter extends React.Component {
 
     render() {
         const params = new URLSearchParams(window.location.search);
+        const statType = this.props.playerInfo['position'];
+        const playerType = statType == 'P' ? 'Batter' : 'Pitcher';
+        const paramName = statType == 'P' ? 'stand' : 'p_throws';
 
         return (
             <form className="d-flex flex-column mx-auto">
                 <div className="row mb-2">
                     <div className="col-5">
-                        <label className="form-label" htmlFor="stand">Batter Handedness</label>
-                        <select className="form-select" id="stand" name="stand" defaultValue={params.get('stand')}>
-                            <option value="">All Batters</option>
+                        <label className="form-label" htmlFor={paramName}>{playerType} Handedness</label>
+                        <select className="form-select" id={paramName} name={paramName} defaultValue={params.get(paramName)}>
+                            <option value="">All {playerType}s</option>
                             <option value="l">Left Handed</option>
                             <option value="r">Right Handed</option>
                         </select>
@@ -408,7 +504,7 @@ class InteractiveBreakdown extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            player_info: null,
+            playerInfo: null,
             data: null,
             zoneSelect: 'Total',
             zoneValue: 'avg',
@@ -434,12 +530,12 @@ class InteractiveBreakdown extends React.Component {
      */
     componentDidMount() {
         const path = window.location.pathname;
-        const player_id = path.substring(17);
+        const playerId = path.substring(17);
         const host = window.location.origin;
-        const api_url = `${host}/baseball/api/player/${player_id}`;
+        const api_url = `${host}/baseball/api/player/${playerId}`;
         fetch(api_url)
             .then(response => response.json())
-            .then(data => this.setState({player_info: data}))
+            .then(data => this.setState({playerInfo: data}))
             .catch(error => {
                 this.setState({error: true});
                 console.error('Error:', error);
@@ -450,13 +546,13 @@ class InteractiveBreakdown extends React.Component {
      * On update fetch data from API to be displayed in the breakdown
      */
     componentDidUpdate(_prevProps, prevState) {
-        if (this.state.player_info !== prevState.player_info) {
+        if (this.state.playerInfo !== prevState.playerInfo) {
             const path = window.location.pathname;
-            const player_id = path.substring(17);
+            const playerId = path.substring(17);
             const params = new URLSearchParams(window.location.search);
             const host = window.location.origin;
-            let stat_type = this.state.player_info['position'] == 'P' ? 0 : 1;
-            const api_url = `${host}/baseball/api/player/${player_id}/zone-breakdown/${stat_type}?${params.toString()}`;
+            let statType = this.state.playerInfo['position'] == 'P' ? 0 : 1;
+            const api_url = `${host}/baseball/api/player/${playerId}/zone-breakdown/${statType}?${params.toString()}`;
             fetch(api_url)
                 .then(response => response.json())
                 .then(data => this.setState({data: data}))
@@ -476,7 +572,9 @@ class InteractiveBreakdown extends React.Component {
 
     /**
      * Sets the zone value to new selection
-     * @param {String} value new zone value 'avg', 'pitch_count', 'whiff'
+     * @param {String} value new zone value 
+     * for Pitchers: 'avg', 'pitch_count', 'whiff'
+     * for Batters: avg, hits, strikeout, walk, single, double, triple, home_run
      */
     setZoneValue(value) {
         this.setState({zoneValue: value});
@@ -504,17 +602,17 @@ class InteractiveBreakdown extends React.Component {
             return (
                 <div className="row border mt-2">
                     <div className="col d-flex justify-content-center" style={cardStyle}>
-                        <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} />
+                        <Breakdown data={this.state.data} zoneSelect={this.state.zoneSelect} reset={this.resetBreakdown} playerInfo={this.state.playerInfo}/>
                     </div>
                     <div className="col-3 d-flex flex-column align-items-center" style={zoneWidth}>
-                        <ZoneValueSelect onZoneValueChange={this.setZoneValue} />
+                        <ZoneValueSelect onZoneValueChange={this.setZoneValue} playerType={this.state.playerInfo['position']}/>
                         <Zone data={this.state.data} onZoneSelect={this.selectZone} zoneValue={this.state.zoneValue} />
                         <div className="mb-2">
                             <p className="text-muted text-center">To see specific stats*, click on a zone</p>
                         </div>
                     </div>
                     <div className="col d-flex flex-column justify-content-center">
-                        <BreakdownFilter />
+                        <BreakdownFilter playerInfo={this.state.playerInfo}/>
                     </div>
                 </div>
             )

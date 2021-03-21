@@ -97,7 +97,7 @@ batter_functions = {
     'single': get_ab_outcome,
     'double': get_ab_outcome,
     'triple': get_ab_outcome,
-    'home_run': get_ab_outcome,
+    'home_run': get_ab_outcome
 }
 
 def zone_analysis(pitch_data, position):
