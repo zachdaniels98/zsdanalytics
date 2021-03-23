@@ -16,7 +16,6 @@ def commands():
 
 @bp.route('/players/<string:name>', methods=['GET'])
 def players(name):
-    # Start working on adding batter support
     """Return list of player names (max 10) and their MLB IDs that have partial matches in first or last names"""
 
     name += '%'

@@ -285,11 +285,25 @@ class Breakdown extends React.Component {
      */
     getPitchDistribution() {
         if (this.props.data) {
+            const pitchNames = {
+                "CH": "Changeup",
+                "CU": "Curveball",
+                "EP": "Eephus",
+                "FC": "Cutter",
+                "FF": "4-Seam Fastball",
+                "FO": "Forkball",
+                "FS": "Split-Finger",
+                "FT": "2-Seam Fastball",
+                "KC": "Knuckle Curve",
+                "KN": "Knuckleball",
+                "SI": "Sinker",
+                "SL": "Slider"
+            };
             const distribution = this.props.data[this.props.zoneSelect]['pitch_type_count'];
             let pitchTypes = [];
             let pitchCounts = [];
             for (const pitchType in distribution) {
-                pitchTypes.push(<th scope="col" key={pitchType}>{pitchType}</th>);
+                pitchTypes.push(<th scope="col" key={pitchType} title={pitchNames[pitchType]}>{pitchType}</th>);
                 pitchCounts.push(<td key={pitchType}>{distribution[pitchType]}</td>);
             }
             return (
