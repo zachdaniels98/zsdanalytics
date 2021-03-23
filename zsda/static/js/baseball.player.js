@@ -5,7 +5,7 @@ It contains an information stat overview, an interactive 14 zone strikezone, and
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PlayerSearch from './baseball.components';
+import { PlayerSearch } from './baseball.components';
 import '../scss/custom.scss';
 
 /**

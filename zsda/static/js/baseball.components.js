@@ -111,8 +111,7 @@ class PlayerSearch extends React.Component {
      */
     componentDidUpdate(_prevProps, prevState) {
         if (this.state.autocomplete) {
-            let playerForm = document.getElementById("player-search");
-            playerForm.requestSubmit();
+            document.forms["player-search"].submit();
         } else if (this.state.value !== prevState.value) {
             if (this.state.value.length >= 2) {
                 this.fetchData();
@@ -140,4 +139,4 @@ class PlayerSearch extends React.Component {
     }
 }
 
-export default PlayerSearch;
+export { PlayerSearch };
