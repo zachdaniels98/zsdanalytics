@@ -10,3 +10,8 @@ ReactDOM.render(
     <PlayerSearch class="w-50"/>,
     document.getElementById('search')
 );
+
+// ReactDOM.render(
+//     <PlayerSearch searchName="compare"/>,
+//     document.getElementById('compare-search')
+// );

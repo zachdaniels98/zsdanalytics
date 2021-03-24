@@ -39,7 +39,7 @@ class Suggestions extends React.Component {
                                 {key}
                         </button>);
         }
-        if (matches.length > 0) {
+        if (matches.length > 0 && !this.props.blurred) {
             return (
             <ul className="list-group dropdown-menu w-100">{matches}</ul>
             );
@@ -62,11 +62,13 @@ class Suggestions extends React.Component {
 class PlayerSearch extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {data: {}, value: '', autocomplete: false};
+        this.state = {data: {}, value: '', autocomplete: false, blurred: false};
         this.handleChange = this.handleChange.bind(this);
         this.autoComplete = this.autoComplete.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.fetchData = this.fetchData.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
+        this.handleFocus = this.handleFocus.bind(this);
     }
 
     /**
@@ -93,6 +95,18 @@ class PlayerSearch extends React.Component {
         } else if (Object.keys(this.state.data).length == 1) {
             this.setState({value: Object.keys(this.state.data)[0], autocomplete: true});
         }
+    }
+
+    handleBlur(e) {
+        if (e.relatedTarget == null) {
+            this.setState({blurred: true});
+        } else if (e.relatedTarget.type == "button" && e.relatedTarget.className == "dropdown-item") {
+            return;
+        }
+    }
+
+    handleFocus(e) {
+        this.setState({blurred: false});
     }
 
     /**
@@ -122,13 +136,18 @@ class PlayerSearch extends React.Component {
     }
 
     render() {
+        let searchName = "player-name";
+        if (this.props.searchName) {
+            searchName = this.props.searchName;
+        }
+
         return (
             <form id="player-search" onSubmit={this.handleSubmit} className={this.props.class}>
-                <label className="form-label" htmlFor="playerName">Player Search</label>
+                <label className="form-label" htmlFor={searchName}>Player Search</label>
                 <div className="row">
                     <div className="col-8">
-                        <input className="form-control" type="search" name="player-name" id="playerName" value={this.state.value} onChange={this.handleChange} placeholder="Enter Player Name" />
-                        <Suggestions data={this.state.data} autoComplete={this.autoComplete} />
+                        <input className="form-control" type="search" name={searchName} id={searchName} value={this.state.value} onChange={this.handleChange} onBlur={this.handleBlur} onFocus={this.handleFocus} placeholder="Enter Player Name" />
+                        <Suggestions data={this.state.data} autoComplete={this.autoComplete} blurred={this.state.blurred} />
                     </div>
                     <div className="col">
                         <button type="submit" className="btn btn-primary">Search</button>
