@@ -97,6 +97,9 @@ class PlayerSearch extends React.Component {
         }
     }
 
+    /**
+     * Hides the search results when clicking out of the input area
+     */
     handleBlur(e) {
         if (e.relatedTarget == null) {
             this.setState({blurred: true});
@@ -105,6 +108,9 @@ class PlayerSearch extends React.Component {
         }
     }
 
+    /**
+     * Makes sure that the search results are appearing when clicking in the input area
+     */
     handleFocus(e) {
         this.setState({blurred: false});
     }
