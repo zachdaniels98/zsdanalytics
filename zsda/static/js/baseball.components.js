@@ -67,10 +67,10 @@ class SearchBar extends React.Component {
      * Hides the search results when clicking out of the input area
      */
     handleBlur(e) {
-        if (e.relatedTarget == null) {
-            this.setState({blurred: true});
-        } else if (e.relatedTarget.type == "button" && e.relatedTarget.className == "dropdown-item") {
+        if (e.relatedTarget != null && e.relatedTarget.type == "button" && e.relatedTarget.className == "dropdown-item") {
             return;
+        } else {
+            this.setState({blurred: true});
         }
     }
 
@@ -114,7 +114,7 @@ class PlayerSearch extends React.Component {
     /**
      * Sets new value and sets autocomplete to true, which is handled in ComponentDidUpdate
      */
-    autoComplete(e, shouldSubmit) {
+    autoComplete(e) {
         this.setState({value: e.target.value, autocomplete: true});
     }
 
