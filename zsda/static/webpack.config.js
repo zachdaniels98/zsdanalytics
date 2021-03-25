@@ -8,6 +8,7 @@ module.exports = {
     entry: {
         baseball_home: path.resolve(__dirname, "js/baseball.home.js"),
         baseball_player: path.resolve(__dirname, "js/baseball.player.js"),
+        baseball_compare: path.resolve(__dirname, "js/baseball.compare.js"),
     },
     // devtool: 'inline-source-map',
     plugins: [
