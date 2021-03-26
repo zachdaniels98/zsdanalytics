@@ -27,10 +27,9 @@ def players(name):
         lname = name
         full = 'OR'
     query = '''
-            SELECT player_id, first_name, last_name 
+            SELECT player_id, first_name, last_name, position
             FROM player 
             WHERE (first_name LIKE '{}' {} last_name LIKE '{}')
-            # AND position = 'P'
             LIMIT 10;
             '''.format(fname, full, lname)
     cursor = get_db().cursor(dictionary=True)
@@ -39,7 +38,7 @@ def players(name):
     cursor.close()
     cleaned = {}
     for p in stats:
-        cleaned[p['first_name'] + ' ' + p['last_name']] = {'player_id': p['player_id']}
+        cleaned[p['first_name'] + ' ' + p['last_name']] = {'player_id': p['player_id'], 'position': p['position']}
     return cleaned
 
 @bp.route('/player/<int:player_id>', methods=['GET'])
