@@ -29,7 +29,13 @@ class CompareSearch extends React.Component {
         if (Object.keys(this.state.pOneData).length == 1 && Object.keys(this.state.pTwoData).length == 1) {
             let playerOnePos = Object.values(this.state.pOneData)[0]['position'];
             let playerTwoPos = Object.values(this.state.pTwoData)[0]['position'];
-            return playerOnePos == playerTwoPos;
+            if (playerOnePos == 'P' && playerTwoPos == 'P') {
+                return true;
+            } else if (playerOnePos == 'P' || playerTwoPos == 'P') {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return false;
         }
