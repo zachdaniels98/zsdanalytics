@@ -35,7 +35,8 @@ class Suggestions extends React.Component {
                                 value={key}
                                 className="dropdown-item"
                                 key={this.props.data[key]['player_id']}
-                                onClick={this.handleClick}>
+                                onClick={this.handleClick}
+                                onBlur={this.props.handleBlur}>
                                 {key}
                         </button>);
         }
@@ -85,7 +86,7 @@ class SearchBar extends React.Component {
         return (
             <React.Fragment>
                 <input className="form-control" type="search" name={this.props.searchName} id={this.props.searchName} value={this.props.value} onChange={this.props.handleChange} onBlur={this.handleBlur} onFocus={this.handleFocus} placeholder="Enter Player Name" />
-                <Suggestions data={this.props.data} autoComplete={this.props.autoComplete} blurred={this.state.blurred} />
+                <Suggestions data={this.props.data} autoComplete={this.props.autoComplete} blurred={this.state.blurred} handleBlur={this.handleBlur} />
             </React.Fragment>
         );
     }
