@@ -14,6 +14,7 @@ class CompareSearch extends React.Component {
         this.playerOneChange = this.playerOneChange.bind(this);
         this.playerTwoChange = this.playerTwoChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.checkPositions = this.checkPositions.bind(this);
     }
 
     playerOneChange(e) {
@@ -24,9 +25,22 @@ class CompareSearch extends React.Component {
         this.setState({pTwoValue: e.target.value});
     }
 
+    checkPositions() {
+        if (Object.keys(this.state.pOneData).length == 1 && Object.keys(this.state.pTwoData).length == 1) {
+            let playerOnePos = Object.values(this.state.pOneData)[0]['position'];
+            let playerTwoPos = Object.values(this.state.pTwoData)[0]['position'];
+            return playerOnePos == playerTwoPos;
+        } else {
+            return false;
+        }
+    }
+
     handleSubmit(e) {
-        if (Object.keys(this.state.pOneData).length != 1 && Object.keys(this.state.pTwoData).length != 1) {
+        if (Object.keys(this.state.pOneData).length != 1 || Object.keys(this.state.pTwoData).length != 1) {
             alert('Please enter two valid players');
+            e.preventDefault();
+        } else if (!this.checkPositions()) {
+            alert('Players must be same of the same type (Both pitchers or both position players)');
             e.preventDefault();
         }
     }
@@ -64,26 +78,26 @@ class CompareSearch extends React.Component {
     render() {
         return (
             <form id="player-search" onSubmit={this.handleSubmit} className={this.props.class}>
-                <label className="form-label" htmlFor="player-one">Player One</label>
-                <label className="form-label" htmlFor="player-two">Player Two</label>
+                <label className="form-label" htmlFor="playerOne">Player One</label>
+                <label className="form-label" htmlFor="playerTwo">Player Two</label>
                 <div className="row">
                     <div className="col-5">
                         <SearchBar 
                             value={this.state.pOneValue}
                             handleChange={this.playerOneChange}
                             autoComplete={this.playerOneChange}
-                            searchName={"player-one"}
+                            searchName={"playerOne"}
                             data={this.state.pOneData} />
                     </div>
                     <div className="col-2">
-                        <button type="submit" className="btn btn-primary">Search</button>
+                        <button type="submit" className="btn btn-primary">Compare</button>
                     </div>
                     <div className="col-5">
                         <SearchBar
                             value={this.state.pTwoValue}
                             handleChange={this.playerTwoChange}
                             autoComplete={this.playerTwoChange}
-                            searchName={"player-two"}
+                            searchName={"playerTwo"}
                             data={this.state.pTwoData} />
                     </div>
                 </div>
