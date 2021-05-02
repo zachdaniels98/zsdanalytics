@@ -84,26 +84,26 @@ class CompareSearch extends React.Component {
     render() {
         return (
             <form id="player-search" onSubmit={this.handleSubmit} className={this.props.class}>
-                <label className="form-label" htmlFor="playerOne">Player One</label>
-                <label className="form-label" htmlFor="playerTwo">Player Two</label>
-                <div className="row">
-                    <div className="col-5">
+                <div className="row justify-content-between">
+                    <div className="col-5 col-md-4">
+                        <label className="form-label" htmlFor="playerOne">Player One</label>
                         <SearchBar 
                             value={this.state.pOneValue}
                             handleChange={this.playerOneChange}
                             autoComplete={this.playerOneChange}
-                            searchName={"playerOne"}
+                            searchName="p1"
                             data={this.state.pOneData} />
                     </div>
-                    <div className="col-2">
+                    <div className="col-2 col-md-4 d-flex align-items-end justify-content-center">
                         <button type="submit" className="btn btn-primary">Compare</button>
                     </div>
-                    <div className="col-5">
+                    <div className="col-5 col-md-4">
+                        <label className="form-label" htmlFor="playerTwo">Player Two</label>
                         <SearchBar
                             value={this.state.pTwoValue}
                             handleChange={this.playerTwoChange}
                             autoComplete={this.playerTwoChange}
-                            searchName={"playerTwo"}
+                            searchName="p2"
                             data={this.state.pTwoData} />
                     </div>
                 </div>

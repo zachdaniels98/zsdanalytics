@@ -8,6 +8,9 @@ from .shared import fields
 
 bp = Blueprint('baseball', __name__, url_prefix='/baseball')
 
+def get_cursor():
+    return get_db().cursor(dictionary=True)
+
 def get_player_id(player_name):
     """Returns MLB ID given a player name"""
 
@@ -26,6 +29,23 @@ def get_player_pos(player_id):
     pos = cursor.fetchone()
     cursor.close()
     return pos
+
+def get_player_info(player_id):
+    cursor = get_cursor()
+    cursor.execute('SELECT * FROM player WHERE player_id = %s', (player_id,))
+    info = cursor.fetchone()
+    return info
+
+def get_stats(stat_type, player_id):
+    cursor = get_cursor()
+    cursor.execute('SELECT * FROM {} WHERE player_id = {}'.format(stat_type, player_id))
+    stats = cursor.fetchone()
+    return stats
+
+def get_adv_stats(stat_type, player_id):
+    cursor = get_cursor()
+    cursor.execute('SELECT * FROM adv_{} WHERE player_id = {}'.format(stat_type, player_id))
+    adv_stats = cursor.fetchone()
 
 @bp.route('/', methods=['GET'])
 def home():
@@ -64,4 +84,16 @@ def player(player_id):
 
 @bp.route('/compare', methods=['GET'])
 def compare():
+    if request.method == 'GET':
+        p1 = request.args.get('p1')
+        p2 = request.args.get('p2')
+        if p1 and p2:
+            p1_id = get_player_id(p1)['player_id']
+            p2_id = get_player_id(p2)['player_id']
+            stat_type = 'pitch_stat' if get_player_pos(p1_id)['position'] == 'P' else 'bat_stat'
+            p1_info = get_player_info(p1_id)
+            p2_info = get_player_info(p2_id)
+            p1_stats = get_stats(stat_type, p1_id)
+            p2_stats = get_stats(stat_type, p2_id)
+            return render_template('baseball/compare.html', p1_info=p1_info, p2_info=p2_info, p1_stats=p1_stats, p2_stats=p2_stats, fields=fields)
     return render_template('baseball/compare.html')
