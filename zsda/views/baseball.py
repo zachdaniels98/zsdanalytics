@@ -34,18 +34,23 @@ def get_player_info(player_id):
     cursor = get_cursor()
     cursor.execute('SELECT * FROM player WHERE player_id = %s', (player_id,))
     info = cursor.fetchone()
+    cursor.close()
     return info
 
 def get_stats(stat_type, player_id):
     cursor = get_cursor()
     cursor.execute('SELECT * FROM {} WHERE player_id = {}'.format(stat_type, player_id))
     stats = cursor.fetchone()
+    cursor.close()
+    stats['avg'] = '{:.3f}'.format(round(stats['avg'], 3))
     return stats
 
 def get_adv_stats(stat_type, player_id):
     cursor = get_cursor()
     cursor.execute('SELECT * FROM adv_{} WHERE player_id = {}'.format(stat_type, player_id))
     adv_stats = cursor.fetchone()
+    cursor.close()
+    return adv_stats
 
 @bp.route('/', methods=['GET'])
 def home():
@@ -95,9 +100,10 @@ def compare():
             p2_info = get_player_info(p2_id)
             p1_stats = get_stats(stat_type, p1_id)
             p2_stats = get_stats(stat_type, p2_id)
+            print(p1_stats['avg'])
             removed = ['player_id', 'tot_bat_faced', 'pitches', 'balls', 'strikes', 'hit_by_pitch', 'wild_pitches', 'balks']
             for stats in [p1_stats, p2_stats]:
-                [stats.pop(rem) for rem in removed]
+                [stats.pop(rem, 0) for rem in removed]
             p1_data = {'info': p1_info, 'stats': p1_stats}
             p2_data = {'info': p2_info, 'stats': p2_stats}
             players = [p1_data, p2_data]
