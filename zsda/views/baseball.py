@@ -95,5 +95,11 @@ def compare():
             p2_info = get_player_info(p2_id)
             p1_stats = get_stats(stat_type, p1_id)
             p2_stats = get_stats(stat_type, p2_id)
-            return render_template('baseball/compare.html', p1_info=p1_info, p2_info=p2_info, p1_stats=p1_stats, p2_stats=p2_stats, fields=fields)
+            removed = ['player_id', 'tot_bat_faced', 'pitches', 'balls', 'strikes', 'hit_by_pitch', 'wild_pitches', 'balks']
+            for stats in [p1_stats, p2_stats]:
+                [stats.pop(rem) for rem in removed]
+            p1_data = {'info': p1_info, 'stats': p1_stats}
+            p2_data = {'info': p2_info, 'stats': p2_stats}
+            players = [p1_data, p2_data]
+            return render_template('baseball/compare.html', players=players, fields=fields)
     return render_template('baseball/compare.html')

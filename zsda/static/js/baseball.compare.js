@@ -84,8 +84,8 @@ class CompareSearch extends React.Component {
     render() {
         return (
             <form id="player-search" onSubmit={this.handleSubmit} className={this.props.class}>
-                <div className="row justify-content-between">
-                    <div className="col-5 col-md-4">
+                <div className="row justify-content-center">
+                    <div className="col-3">
                         <label className="form-label" htmlFor="playerOne">Player One</label>
                         <SearchBar 
                             value={this.state.pOneValue}
@@ -94,10 +94,10 @@ class CompareSearch extends React.Component {
                             searchName="p1"
                             data={this.state.pOneData} />
                     </div>
-                    <div className="col-2 col-md-4 d-flex align-items-end justify-content-center">
+                    <div className="col-3 d-flex align-items-end justify-content-center">
                         <button type="submit" className="btn btn-primary">Compare</button>
                     </div>
-                    <div className="col-5 col-md-4">
+                    <div className="col-3">
                         <label className="form-label" htmlFor="playerTwo">Player Two</label>
                         <SearchBar
                             value={this.state.pTwoValue}
